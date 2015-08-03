@@ -7,6 +7,8 @@
 //
 
 #import "AppDelegate.h"
+#import "GZTabBarController.h"
+#import "GZOAuthViewController.h"
 
 @interface AppDelegate ()
 
@@ -17,7 +19,16 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
+    // 1.创建window
     
+    self.window = [[UIWindow alloc] initWithFrame:GZScreenF];
+    
+    [self.window makeKeyAndVisible];
+    
+    // 2.设置根控制器
+//    self.window.rootViewController = [[GZTabBarController alloc] init];
+    
+    self.window.rootViewController = [[GZOAuthViewController alloc] init];
     
     return YES;
 }

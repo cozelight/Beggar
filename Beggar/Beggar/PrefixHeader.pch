@@ -16,6 +16,8 @@
     #ifdef __OBJC__
 
         #import "UIView+extension.h"
+        #import "UIImage+Extension.h"
+        #import "UIBarButtonItem+extension.h"
 
         // 重新编写NSLog方法
         #ifdef DEBUG
@@ -26,12 +28,18 @@
 
         // 定义颜色
         #define GZColor(r, g, b) [UIColor colorWithRed:(r)/255.0 green:(g)/255.0 blue:(b)/255.0 alpha:1.0]
+        #define GZColorRGBA(r, g, b, a) [UIColor colorWithRed:(r)/255.0 green:(g)/255.0 blue:(b)/255.0 alpha:(a)]
 
         // 定义随机色
         #define GZRandomColor GZColor(arc4random_uniform(256), arc4random_uniform(256), arc4random_uniform(256))
 
         // 定义通知中心
         #define GZNotificationCenter [NSNotificationCenter defaultCenter]
+
+        // 定义屏幕尺寸
+        #define GZScreenF [UIScreen mainScreen].bounds
+        #define GZScreenW [UIScreen mainScreen].bounds.size.width
+        #define GZScreenH [UIScreen mainScreen].bounds.size.height
 
 
     #endif
