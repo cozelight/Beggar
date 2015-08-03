@@ -1,0 +1,40 @@
+//
+//  PrefixHeader.pch
+//  Beggar
+//
+//  Created by Madao on 15/8/3.
+//  Copyright (c) 2015年 GanZhen. All rights reserved.
+//
+
+#ifndef Beggar_PrefixHeader_pch
+#define Beggar_PrefixHeader_pch
+
+// Include any system framework and library headers here that should be included in all compilation units.
+// You will also need to set the Prefix Header build setting of one or more of your targets to reference this file.
+
+
+    #ifdef __OBJC__
+
+        #import "UIView+extension.h"
+
+        // 重新编写NSLog方法
+        #ifdef DEBUG
+            #define GZLog(...) NSLog(__VA_ARGS__)
+        #else // 发布阶段
+            #define GZLog(...)
+        #endif
+
+        // 定义颜色
+        #define GZColor(r, g, b) [UIColor colorWithRed:(r)/255.0 green:(g)/255.0 blue:(b)/255.0 alpha:1.0]
+
+        // 定义随机色
+        #define GZRandomColor GZColor(arc4random_uniform(256), arc4random_uniform(256), arc4random_uniform(256))
+
+        // 定义通知中心
+        #define GZNotificationCenter [NSNotificationCenter defaultCenter]
+
+
+    #endif
+
+
+#endif
