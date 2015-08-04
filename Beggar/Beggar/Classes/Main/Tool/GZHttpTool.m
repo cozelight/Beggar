@@ -7,51 +7,138 @@
 //
 
 #import "GZHttpTool.h"
+#import "GZAccountTool.h"
 #import "AFNetworking.h"
-#import "SVProgressHUD.h"
+
+NSString * const kGZRequestTokenUrl = @"http://fanfou.com/oauth/request_token";
+NSString * const kGZAccessTokenUrl = @"http://fanfou.com/oauth/access_token";
+NSString * const kGZAuthorizeUrl = @"http://fanfou.com/oauth/authorize";
+NSString * const kGZConsumerKey = @"628995bdd46948e469a34742c88210fe";
+NSString * const kGZConsumerSecret = @"1f61c472c6f51d3c02bd98e21b804e79";
+
+@interface GZHttpTool ()
+
+@property (strong, nonatomic) AFOAuth1Client *OAuthClient;
+@property (strong, nonatomic) AFOAuth1Token *requestToken;
+
+@end
+
+// 用来保存唯一的单例对象
+static id _instance;
 
 @implementation GZHttpTool
+
+#pragma mark - 初始化单例
+
++ (instancetype)allocWithZone:(struct _NSZone *)zone
+{
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        _instance = [super allocWithZone:zone];
+    });
+    return _instance;
+}
+
++ (instancetype)shareHttpTool
+{
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        _instance = [[self alloc] init];
+    });
+    return _instance;
+}
+
+#pragma mark - OAuth
+
+- (AFOAuth1Client *)OAuthClient
+{
+    if (_OAuthClient == nil) {
+        
+        NSURL *baseURL = [NSURL URLWithString:kGZRequestTokenUrl];
+        _OAuthClient = [[AFOAuth1Client alloc] initWithBaseURL:baseURL key:kGZConsumerKey secret:kGZConsumerSecret];
+    }
+    return _OAuthClient;
+}
+
+- (void)acquireOAuthRequestTokenWithSuccess:(void (^)(NSURL *))success failure:(void (^)(NSError *))failure
+{
+    NSURL *callbackURL = [NSURL URLWithString:@"http:///success"];
+    [self.OAuthClient acquireOAuthRequestTokenWithPath:kGZRequestTokenUrl callbackURL:callbackURL accessMethod:@"GET" scope:nil success:^(AFOAuth1Token *requestToken, id responseObject) {
+        
+        self.requestToken = requestToken;
+        
+        NSString *reqStr = [NSString stringWithFormat:@"http://m.fanfou.com/oauth/authorize?oauth_token=%@&oauth_callback=http://",requestToken.key];
+        NSURL *reqUrl = [NSURL URLWithString:reqStr];
+        if (success) {
+            success(reqUrl);
+        }
+        
+    } failure:^(NSError *error) {
+        if (failure) {
+            failure(error);
+        }
+    }];
+}
+
+- (void)acquireOAuthAccessTokenWithSuccess:(void (^)())success failure:(void (^)(NSError *))failure
+{
+    
+    [self.OAuthClient acquireOAuthAccessTokenWithPath:kGZAccessTokenUrl requestToken:self.requestToken accessMethod:@"GET" success:^(AFOAuth1Token *accessToken, id responseObject) {
+        if (success) {
+            
+            // 将返回的账号字典数据 --> 模型，存进沙盒
+            GZAccount *account = [GZAccount accountWithDict:accessToken];
+            
+            [GZAccountTool saveAccount:account];
+            
+            success();
+        }
+    } failure:^(NSError *error) {
+        if (failure) {
+            failure(error);
+        }
+    }];
+}
+
+#pragma mark - 网络请求
+
+- (void)getWithURL:(NSString *)url success:(HttpRequestSuccess)success failure:(HttpRequestFailure)failure
+{
+    
+}
 
 + (void)requestWithMethod:(NSString *)method url:(NSString *)url params:(NSDictionary *)params success:(HttpRequestSuccess)success failure:(HttpRequestFailure)failure
 {
     // 1.创建client
-    AFHTTPClient *client = [AFHTTPClient clientWithBaseURL:[NSURL URLWithString:url]];
+    AFOAuth1Client *client = [[AFOAuth1Client alloc] initWithBaseURL:[NSURL URLWithString:url] key:kGZConsumerKey secret:kGZConsumerSecret];
     
-    // 2.创建请求
-    NSURLRequest *request = [client requestWithMethod:method path:nil parameters:params];
+    GZAccount *account = [GZAccountTool account];
+    AFOAuth1Token *accessToken = [[AFOAuth1Token alloc] initWithKey:account.key secret:account.secret session:account.session expiration:nil renewable:NO];
+    client.accessToken = accessToken;
     
-    // 3.发送请求
-    AFHTTPRequestOperation *operation = [client HTTPRequestOperationWithRequest:request success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        id json = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableLeaves error:nil];
-        if (json[@"error"]) {
-            if (failure) {
-                NSError *error = [NSError errorWithDomain:json[@"error"] code:[json[@"error_code"] intValue] userInfo:json];
-                failure(error);
-            }
-//            [MBProgressHUD showError:json[@"error"] toView:nil];
-            [SVProgressHUD showErrorWithStatus:json[@"error"]];
-        } else if (success) {
-            success(json);
+
+}
+
++ (void)getWith:(NSString *)url success:(HttpRequestSuccess)success failure:(HttpRequestFailure)failure
+{
+    AFOAuth1Client *client = [[AFOAuth1Client alloc] initWithBaseURL:[NSURL URLWithString:url] key:kGZConsumerKey secret:kGZConsumerSecret];
+    
+    GZAccount *account = [GZAccountTool account];
+    AFOAuth1Token *accessToken = [[AFOAuth1Token alloc] initWithKey:account.key secret:account.secret session:account.session expiration:nil renewable:NO];
+    client.accessToken = accessToken;
+    
+    [client getWithURL:url success:^(id responseObject) {
+        
+        if (success) {
+            success(responseObject);
         }
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        
+    } failure:^(NSError *error) {
         if (failure) {
             failure(error);
         }
-        
-//        [MBProgressHUD showError:error.domain toView:nil];
-        [SVProgressHUD showErrorWithStatus:error.domain];
     }];
-    [operation start];
 }
 
-+ (void)getWithURL:(NSString *)url params:(NSDictionary *)params success:(HttpRequestSuccess)success failure:(HttpRequestFailure)failure
-{
-    [self requestWithMethod:@"GET" url:url params:params success:success failure:failure];
-}
-
-+ (void)postWithURL:(NSString *)url params:(NSDictionary *)params success:(HttpRequestSuccess)success failure:(HttpRequestFailure)failure
-{
-    [self requestWithMethod:@"POST" url:url params:params success:success failure:failure];
-}
 
 @end

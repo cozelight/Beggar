@@ -9,6 +9,7 @@
 #import "AppDelegate.h"
 #import "GZTabBarController.h"
 #import "GZOAuthViewController.h"
+#import "GZAccountTool.h"
 
 @interface AppDelegate ()
 
@@ -26,9 +27,12 @@
     [self.window makeKeyAndVisible];
     
     // 2.设置根控制器
-//    self.window.rootViewController = [[GZTabBarController alloc] init];
-    
-    self.window.rootViewController = [[GZOAuthViewController alloc] init];
+    GZAccount *account = [GZAccountTool account];
+    if (account) {
+        self.window.rootViewController = [[GZTabBarController alloc] init];
+    } else {
+        self.window.rootViewController = [[GZOAuthViewController alloc] init];
+    }
     
     return YES;
 }

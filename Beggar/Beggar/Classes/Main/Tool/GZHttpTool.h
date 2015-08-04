@@ -7,13 +7,19 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "AFOAuth1Client.h"
 
 typedef void (^HttpRequestSuccess)(id json);
 typedef void (^HttpRequestFailure)(NSError *error);
 
 @interface GZHttpTool : NSObject
 
-+ (void)postWithURL:(NSString *)url params:(NSDictionary *)params success:(HttpRequestSuccess)success failure:(HttpRequestFailure)failure;
-+ (void)getWithURL:(NSString *)url params:(NSDictionary *)params success:(HttpRequestSuccess)success failure:(HttpRequestFailure)failure;
++ (instancetype)shareHttpTool;
+
+- (void)acquireOAuthRequestTokenWithSuccess:(void (^)(NSURL *reqUrl))success failure:(void (^)(NSError *error))failure;
+
+- (void)acquireOAuthAccessTokenWithSuccess:(void (^)())success failure:(void (^)(NSError *error))failure;
+
++ (void)getWith:(NSString *)url success:(HttpRequestSuccess)success failure:(HttpRequestFailure)failure;
 
 @end

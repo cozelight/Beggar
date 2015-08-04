@@ -8,14 +8,22 @@
 
 #import "GZHomeViewController.h"
 #import "GZMessageViewController.h"
-
-#define GZLeftMenuW (0.6 * GZScreenW)
+#import "GZHttpTool.h"
 
 @implementation GZHomeViewController
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+ 
+    [GZHttpTool getWith:@"http://api.fanfou.com/statuses/home_timeline.json" success:^(id json) {
+        
+        GZLog(@"%@",json);
+        
+    } failure:^(NSError *error) {
+        GZLog(@"%@",error);
+    }];
+    
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
