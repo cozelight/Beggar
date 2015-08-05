@@ -143,7 +143,7 @@ typedef NS_ENUM(NSUInteger, AFOAuthSignatureMethod) {
                               completion:(void (^)())completion;
 
 
-- (void)getWith:(NSString *)url success:(void(^)(id responseObject))success failure:(void (^)(NSError *error))failure;
+- (void)getWith:(NSString *)url params:(NSDictionary *)params success:(void(^)(id responseObject))success failure:(void (^)(NSError *error))failure;
 
 @end
 

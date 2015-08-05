@@ -462,19 +462,22 @@ static void AFNetworkReachabilityReleaseCallback(const void *info) {
 
 #pragma mark -
 
-- (NSMutableURLRequest *)requestWithMethod:(NSString *)method path:(NSString *)path
+/**
+ *  Gan添加的request获取方式,只针对GET请求
+ *
+ *  @param path   url地址
+ *
+ */
+- (NSMutableURLRequest *)requestWithPath:(NSString *)path
 {
-    NSParameterAssert(method);
     
     if (!path) {
         path = @"";
     }
     
-    NSURL *url = [NSURL URLWithString:path relativeToURL:self.baseURL];
-    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
-    [request setHTTPMethod:method];
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:path]];
+    [request setHTTPMethod:@"GET"];
     [request setAllHTTPHeaderFields:self.defaultHeaders];
-    [request setURL:url];
     return request;
 }
 

@@ -420,12 +420,12 @@ static NSDictionary * AFKeychainQueryDictionaryWithIdentifier(NSString *identifi
 
 #pragma mark -
 
-- (void)getWith:(NSString *)url success:(void(^)(id responseObject))success failure:(void (^)(NSError *error))failure
+- (void)getWith:(NSString *)url params:(NSDictionary *)params success:(void(^)(id responseObject))success failure:(void (^)(NSError *error))failure
 {
-    NSMutableDictionary *parameters = [[self OAuthParameters] mutableCopy];
-    parameters[@"oauth_token"] = self.accessToken.key;
+    NSMutableDictionary *authorizationParams = [[self OAuthParameters] mutableCopy];
+    authorizationParams[@"oauth_token"] = self.accessToken.key;
     
-    NSMutableURLRequest *request = [self requestWithMethod:@"GET" path:url parameters:parameters];
+    NSMutableURLRequest *request = [self getRequestWithPath:url params:params authorizationParams:authorizationParams];
     
     AFHTTPRequestOperation *operation = [self HTTPRequestOperationWithRequest:request success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if (success) {
@@ -439,6 +439,23 @@ static NSDictionary * AFKeychainQueryDictionaryWithIdentifier(NSString *identifi
     
     [self enqueueHTTPRequestOperation:operation];
     
+}
+
+- (NSMutableURLRequest *)getRequestWithPath:(NSString *)path params:(NSDictionary *)params authorizationParams:(NSDictionary *)authorizationParams
+{
+    if (params) {
+        path = [path stringByAppendingFormat:[path rangeOfString:@"?"].location == NSNotFound ? @"?%@" : @"&%@", AFQueryStringFromParametersWithEncoding(params, super.stringEncoding)];
+    }
+    
+    NSMutableURLRequest *request = [super requestWithPath:path];
+    
+    // Only use parameters in the request entity body (with a content-type of `application/x-www-form-urlencoded`).
+    // See RFC 5849, Section 3.4.1.3.1 http://tools.ietf.org/html/rfc5849#section-3.4
+    NSDictionary *authorizationParameters = authorizationParams;
+    [request setValue:[self authorizationHeaderForMethod:@"GET" path:path parameters:authorizationParameters] forHTTPHeaderField:@"Authorization"];
+    [request setHTTPShouldHandleCookies:NO];
+    
+    return request;
 }
 
 - (void)setServiceProviderRequestHandler:(void (^)(NSURLRequest *request))block
@@ -460,9 +477,8 @@ static NSDictionary * AFKeychainQueryDictionaryWithIdentifier(NSString *identifi
             [mutableParameters removeObjectForKey:key];
         }
     }
+    NSMutableURLRequest *request = [super requestWithMethod:method path:path parameters:mutableParameters];
 
-    NSMutableURLRequest *request = [super requestWithMethod:method path:path];
-    NSLog(@"%@",request.URL);
     // Only use parameters in the request entity body (with a content-type of `application/x-www-form-urlencoded`).
     // See RFC 5849, Section 3.4.1.3.1 http://tools.ietf.org/html/rfc5849#section-3.4
     NSDictionary *authorizationParameters = parameters;

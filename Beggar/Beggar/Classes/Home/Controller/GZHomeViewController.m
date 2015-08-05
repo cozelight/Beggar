@@ -15,20 +15,11 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
- 
-    [[GZHttpTool shareHttpTool] getWithURL:@"http://api.fanfou.com/statuses/home_timeline.json?since_id=KzkZ8voQZgk&count=1" success:^(id json) {
-        
-        GZLog(@"%@",json);
-        
-    } failure:^(NSError *error) {
-        GZLog(@"%@",error);
-    }];
-    
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 10;
+    return 30;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath

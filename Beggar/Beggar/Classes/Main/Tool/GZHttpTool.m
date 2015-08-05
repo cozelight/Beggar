@@ -101,26 +101,14 @@ static id _instance;
 
 #pragma mark - 网络请求
 
-- (void)getWithURL:(NSString *)url  success:(HttpRequestSuccess)success failure:(HttpRequestFailure)failure
+- (void)getWithURL:(NSString *)url params:(NSDictionary *)params success:(HttpRequestSuccess)success failure:(HttpRequestFailure)failure
 {
     GZAccount *account = [GZAccountTool account];
     AFOAuth1Token *accessToken = [[AFOAuth1Token alloc] initWithKey:account.key secret:account.secret session:account.session expiration:nil renewable:NO];
-//    [self.OAuthClient acquireOAuthAccessTokenWithPath:url requestToken:accessToken accessMethod:@"GET" success:^(AFOAuth1Token *accessToken, id responseObject) {
-//        
-//        id json = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:nil];
-//        
-//        if (success) {
-//            success(json);
-//        }
-//    } failure:^(NSError *error) {
-//        if (failure) {
-//            failure(error);
-//        }
-//    }];
     
     self.OAuthClient.accessToken = accessToken;
-
-    [self.OAuthClient getWith:url success:^(id responseObject) {
+    
+    [self.OAuthClient getWith:url params:params  success:^(id responseObject) {
         id json = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:nil];
         
         if (success) {
