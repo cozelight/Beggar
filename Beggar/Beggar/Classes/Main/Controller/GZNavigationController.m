@@ -7,6 +7,7 @@
 //
 
 #import "GZNavigationController.h"
+#import "GZNavigationBar.h"
 
 @interface GZNavigationController ()
 
@@ -14,14 +15,26 @@
 
 @implementation GZNavigationController
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    // Do any additional setup after loading the view.
++ (void)initialize
+{
+    UINavigationBar *bar = [UINavigationBar appearance];
+    
+    UIImage *image = [UIImage imageNamed:@"timeline_nav_bg"];
+//    [bar setBackgroundImage:image forBarMetrics:UIBarMetricsDefault];
+    [bar setBarTintColor:[UIColor colorWithPatternImage:image]];
+    
+    
+    NSMutableDictionary *titleAttrs = [NSMutableDictionary dictionary];
+    titleAttrs[NSForegroundColorAttributeName] = [UIColor whiteColor];
+    titleAttrs[NSFontAttributeName] = [UIFont boldSystemFontOfSize:18];
+    [bar setTitleTextAttributes:titleAttrs];
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    
+    // 替换自定义导航栏
+    [self setValue:[[GZNavigationBar alloc] init] forKeyPath:@"navigationBar"];
 }
 
 /**

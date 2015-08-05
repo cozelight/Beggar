@@ -30,6 +30,9 @@
 		E09CB7391B6EFC2700D6769F /* UITextView+Extension.m in Sources */ = {isa = PBXBuildFile; fileRef = E09CB7301B6EFC2700D6769F /* UITextView+Extension.m */; };
 		E09CB73A1B6EFC2700D6769F /* UIView+extension.m in Sources */ = {isa = PBXBuildFile; fileRef = E09CB7321B6EFC2700D6769F /* UIView+extension.m */; };
 		E09CB73B1B6EFC2700D6769F /* UIWindow+Extension.m in Sources */ = {isa = PBXBuildFile; fileRef = E09CB7341B6EFC2700D6769F /* UIWindow+Extension.m */; };
+		E0A964D51B71DAB800FBA5BC /* GZPhoto.m in Sources */ = {isa = PBXBuildFile; fileRef = E0A964D41B71DAB800FBA5BC /* GZPhoto.m */; };
+		E0A964D81B72049600FBA5BC /* GZNavigationBar.m in Sources */ = {isa = PBXBuildFile; fileRef = E0A964D71B72049600FBA5BC /* GZNavigationBar.m */; };
+		E0A964DB1B72669900FBA5BC /* GZConst.m in Sources */ = {isa = PBXBuildFile; fileRef = E0A964DA1B72669900FBA5BC /* GZConst.m */; };
 		E0EFDD931B719C7C00508E8F /* AFOAuth1Client.m in Sources */ = {isa = PBXBuildFile; fileRef = E0EFDD921B719C7C00508E8F /* AFOAuth1Client.m */; };
 		E0EFDDA81B719C8800508E8F /* AFHTTPClient.m in Sources */ = {isa = PBXBuildFile; fileRef = E0EFDD961B719C8800508E8F /* AFHTTPClient.m */; };
 		E0EFDDA91B719C8800508E8F /* AFHTTPRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = E0EFDD981B719C8800508E8F /* AFHTTPRequestOperation.m */; };
@@ -106,6 +109,12 @@
 		E09CB7331B6EFC2700D6769F /* UIWindow+Extension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIWindow+Extension.h"; sourceTree = "<group>"; };
 		E09CB7341B6EFC2700D6769F /* UIWindow+Extension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIWindow+Extension.m"; sourceTree = "<group>"; };
 		E09CB73C1B6EFC6500D6769F /* PrefixHeader.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PrefixHeader.pch; sourceTree = "<group>"; };
+		E0A964D31B71DAB800FBA5BC /* GZPhoto.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GZPhoto.h; sourceTree = "<group>"; };
+		E0A964D41B71DAB800FBA5BC /* GZPhoto.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GZPhoto.m; sourceTree = "<group>"; };
+		E0A964D61B72049600FBA5BC /* GZNavigationBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GZNavigationBar.h; sourceTree = "<group>"; };
+		E0A964D71B72049600FBA5BC /* GZNavigationBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GZNavigationBar.m; sourceTree = "<group>"; };
+		E0A964D91B72669900FBA5BC /* GZConst.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GZConst.h; sourceTree = "<group>"; };
+		E0A964DA1B72669900FBA5BC /* GZConst.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GZConst.m; sourceTree = "<group>"; };
 		E0EFDD911B719C7C00508E8F /* AFOAuth1Client.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFOAuth1Client.h; sourceTree = "<group>"; };
 		E0EFDD921B719C7C00508E8F /* AFOAuth1Client.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFOAuth1Client.m; sourceTree = "<group>"; };
 		E0EFDD951B719C8800508E8F /* AFHTTPClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPClient.h; sourceTree = "<group>"; };
@@ -382,6 +391,8 @@
 			children = (
 				E0F81CE91B70C73700E773CB /* GZUser.h */,
 				E0F81CEA1B70C73700E773CB /* GZUser.m */,
+				E0A964D31B71DAB800FBA5BC /* GZPhoto.h */,
+				E0A964D41B71DAB800FBA5BC /* GZPhoto.m */,
 				E0F81CEC1B70C74500E773CB /* GZStatus.h */,
 				E0F81CED1B70C74500E773CB /* GZStatus.m */,
 				E0F81CEF1B70C76100E773CB /* GZStatusFrame.h */,
@@ -454,6 +465,8 @@
 			children = (
 				E09CB7111B6EF5BF00D6769F /* AppDelegate.h */,
 				E09CB7121B6EF5BF00D6769F /* AppDelegate.m */,
+				E0A964D91B72669900FBA5BC /* GZConst.h */,
+				E0A964DA1B72669900FBA5BC /* GZConst.m */,
 				E09CB7131B6EF5BF00D6769F /* main.m */,
 			);
 			path = Other;
@@ -475,6 +488,8 @@
 				E00C7B611B6F0976007DA072 /* GZLeftMenu.m */,
 				E00C7B641B6F1E68007DA072 /* GZLeftMenuButton.h */,
 				E00C7B651B6F1E68007DA072 /* GZLeftMenuButton.m */,
+				E0A964D61B72049600FBA5BC /* GZNavigationBar.h */,
+				E0A964D71B72049600FBA5BC /* GZNavigationBar.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -771,6 +786,7 @@
 				E00C7BEC1B6F647B007DA072 /* GZHttpTool.m in Sources */,
 				E0EFDD931B719C7C00508E8F /* AFOAuth1Client.m in Sources */,
 				E0F81CE51B70BB7900E773CB /* GZAccountTool.m in Sources */,
+				E0A964DB1B72669900FBA5BC /* GZConst.m in Sources */,
 				E0F81CF11B70C76100E773CB /* GZStatusFrame.m in Sources */,
 				E0EFDDAF1B719C8800508E8F /* AFXMLRequestOperation.m in Sources */,
 				E0EFDDB01B719C8800508E8F /* UIImageView+AFNetworking.m in Sources */,
@@ -778,6 +794,7 @@
 				E09CB73B1B6EFC2700D6769F /* UIWindow+Extension.m in Sources */,
 				E0EFDDAD1B719C8800508E8F /* AFPropertyListRequestOperation.m in Sources */,
 				E00C7B6A1B6F2075007DA072 /* UIImage+Extension.m in Sources */,
+				E0A964D81B72049600FBA5BC /* GZNavigationBar.m in Sources */,
 				E0EFDDA91B719C8800508E8F /* AFHTTPRequestOperation.m in Sources */,
 				E00C7BE91B6F6429007DA072 /* GZOAuthViewController.m in Sources */,
 				E09CB7381B6EFC2700D6769F /* UIBarButtonItem+extension.m in Sources */,
@@ -786,6 +803,7 @@
 				E00C7B951B6F3C92007DA072 /* GZProfileViewController.m in Sources */,
 				E0F81CEE1B70C74500E773CB /* GZStatus.m in Sources */,
 				E09CB7371B6EFC2700D6769F /* NSString+Extension.m in Sources */,
+				E0A964D51B71DAB800FBA5BC /* GZPhoto.m in Sources */,
 				E09CB7361B6EFC2700D6769F /* NSDate+Extension.m in Sources */,
 				E0EFDDAB1B719C8800508E8F /* AFJSONRequestOperation.m in Sources */,
 				E00C7B921B6F3C81007DA072 /* GZDiscoverViewController.m in Sources */,

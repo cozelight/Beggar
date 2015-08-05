@@ -10,11 +10,6 @@
 #import "GZAccountTool.h"
 #import "AFNetworking.h"
 
-NSString * const kGZRequestTokenUrl = @"http://fanfou.com/oauth/request_token";
-NSString * const kGZAccessTokenUrl = @"http://fanfou.com/oauth/access_token";
-NSString * const kGZConsumerKey = @"628995bdd46948e469a34742c88210fe";
-NSString * const kGZConsumerSecret = @"1f61c472c6f51d3c02bd98e21b804e79";
-
 @interface GZHttpTool ()
 
 @property (strong, nonatomic) AFOAuth1Client *OAuthClient;
@@ -61,7 +56,7 @@ static id _instance;
 
 - (void)acquireOAuthRequestTokenWithSuccess:(void (^)(NSURL *))success failure:(void (^)(NSError *))failure
 {
-    NSURL *callbackURL = [NSURL URLWithString:@"http:///success"];
+    NSURL *callbackURL = [NSURL URLWithString:kGZCallBackUrl];
     [self.OAuthClient acquireOAuthRequestTokenWithPath:kGZRequestTokenUrl callbackURL:callbackURL accessMethod:@"GET" scope:nil success:^(AFOAuth1Token *requestToken, id responseObject) {
         
         self.requestToken = requestToken;

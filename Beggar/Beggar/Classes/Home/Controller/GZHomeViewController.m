@@ -9,17 +9,163 @@
 #import "GZHomeViewController.h"
 #import "GZMessageViewController.h"
 #import "GZHttpTool.h"
+#import "GZUser.h"
+#import "GZPhoto.h"
+#import "GZStatus.h"
+#import "MJExtension.h"
+#import "MJRefresh.h"
+#import "GZAccountTool.h"
+#import "UIImageView+WebCache.h"
+
+@interface GZHomeViewController ()
+
+@property (strong, nonatomic) NSMutableArray *statusArray;
+
+@end
 
 @implementation GZHomeViewController
 
+#pragma mark - 初始化
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    // 1.设置导航栏
+    [self setupNav];
+    
+    // 2.获取用户信息
+    [self setupUserInfo];
+    
+    // 3.集成下拉刷新控件
+    [self setupDownRefresh];
+    
+    // 4.集成上拉加载更多控件
+    [self setupUpRefresh];
+}
+
+- (NSMutableArray *)statusArray
+{
+    if (!_statusArray) {
+        _statusArray = [[NSMutableArray alloc] init];
+    }
+    return _statusArray;
+}
+
+#pragma makr - 设置导航栏
+- (void)setupNav
+{
+    // 设置右上角发送按钮
+    self.navigationItem.rightBarButtonItem = [UIBarButtonItem itemAddTarget:self action:@selector(sendClick) image:@"mask_timeline_top_icon" highlightImage:nil];
+
+    // 设置标题
+    GZAccount *account = [GZAccountTool account];
+    self.navigationItem.title = account.userName ? account.userName : @"首页";
+    
+}
+
+- (void)sendClick
+{
+    GZLog(@"sendClick");
+}
+
+#pragma mark - 获取用户信息
+- (void)setupUserInfo
+{
+    [[GZHttpTool shareHttpTool] getWithURL:kGZUserShow params:nil success:^(id json) {
+        
+        GZUser *user = [GZUser objectWithKeyValues:json];
+        GZAccount *account = [GZAccountTool account];
+        account.userName = user.name;
+        account.userID = user.userID;
+        
+        self.navigationItem.title = user.name;
+        
+        [GZAccountTool saveAccount:account];
+        
+    } failure:^(NSError *error) {
+        GZLog(@"%@",error);
+    }];
+}
+
+#pragma mark - 集成下拉刷新控件
+- (void)setupDownRefresh
+{
+   self.tableView.header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(loadNewStatus)];
+    
+    // 进入刷新状态
+    [self.tableView.header beginRefreshing];
+}
+
+- (void)loadNewStatus
+{
+    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+    params[@"count"] = @"20";
+    
+    GZStatus *status = [self.statusArray firstObject];
+    if (status) {
+        params[@"since_id"] = status.msgID;
+    }
+    
+    [[GZHttpTool shareHttpTool] getWithURL:kGZHomeTimeLine params:params success:^(id json) {
+        
+        // 将 "微博字典"数组 转为 "微博模型"数组
+        NSArray *statuses = [GZStatus objectArrayWithKeyValuesArray:json];
+        
+        // 将 HWStatus数组 转为 HWStatusFrame数组
+        
+        // 将最新的微博数据，添加到总数组的最前面
+        NSRange range = NSMakeRange(0, statuses.count);
+        NSIndexSet *indexSet = [NSIndexSet indexSetWithIndexesInRange:range];
+        [self.statusArray insertObjects:statuses atIndexes:indexSet];
+        
+        // 刷新表格
+        [self.tableView reloadData];
+        
+        // 结束刷新
+        [self.tableView.header endRefreshing];
+        
+        // 显示最新微博的数量
+        
+    } failure:^(NSError *error) {
+        GZLog(@"%@",error);
+        [self.tableView.header endRefreshing];
+    }];
+}
+
+#pragma mark - 集成上拉加载更多控件
+- (void)setupUpRefresh
+{
+    self.tableView.footer = [MJRefreshAutoNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(loadMoreStatus)];
+}
+
+- (void)loadMoreStatus
+{
+    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+    params[@"count"] = @"20";
+    
+    GZStatus *status = [self.statusArray lastObject];
+    if (status) {
+        params[@"max_id"] = status.msgID;
+    }
+    
+    [[GZHttpTool shareHttpTool] getWithURL:kGZHomeTimeLine params:params success:^(id json) {
+        
+        NSArray *statuses = [GZStatus objectArrayWithKeyValuesArray:json];
+        [self.statusArray addObjectsFromArray:statuses];
+        
+        [self.tableView.footer endRefreshing];
+        [self.tableView reloadData];
+        
+    } failure:^(NSError *error) {
+        GZLog(@"%@",error);
+        [self.tableView.footer endRefreshing];
+    }];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 30;
+    GZLog(@"%zd",self.statusArray.count);
+    return self.statusArray.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -27,9 +173,14 @@
     static NSString *ID = @"cell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:ID];
     if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:ID];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:ID];
     }
-    cell.textLabel.text = [NSString stringWithFormat:@"测试消息---%zd",indexPath.row];
+    
+    GZStatus *status = self.statusArray[indexPath.row];
+    cell.textLabel.text = status.user.name;
+    cell.detailTextLabel.text = status.text;
+    [cell.imageView sd_setImageWithURL:[NSURL URLWithString:status.user.profile_image_url] placeholderImage:[UIImage imageNamed:@"timeline_item_pic_icon"]];
+    
     return cell;
 }
 
@@ -44,57 +195,3 @@
 }
 
 @end
-
-/*
- 
- location = 福建,
-	birthday = 1991-00-00,
-	statuses_count = 1041,
-	status = {
-	source = 网页,
-	truncated = 0,
-	id = BUHL7ef-EYU,
-	created_at = Mon Aug 03 17:58:07 +0000 2015,
-	rawid = 185473038,
-	in_reply_to_lastmsg_id = ,
-	text = 哈哈哈哈, 折腾了一天, 弄到现在, 总算踏出了第一步! 现在肚子饿的呱呱叫,
-	favorited = 0,
-	in_reply_to_screen_name = ,
-	in_reply_to_user_id =
- },
-	url = ,
-	profile_sidebar_fill_color = #000000,
-	profile_sidebar_border_color = #006fa6,
-	notifications = 0,
-	friends_count = 4,
-	name = Elfen_Madao,
-	screen_name = Elfen_Madao,
-	utc_offset = 28800,
-	profile_background_color = #000000,
-	id = fairright,
-	gender = 男,
-	protected = 0,
-	profile_background_image_url = http://avatar.fanfou.com/b0/00/hh/ef_1299405272.jpg,
-	profile_image_url_large = http://avatar2.fanfou.com/l0/00/hh/ef.jpg?1290746754,
-	profile_background_tile = 0,
-	profile_image_url = http://avatar2.fanfou.com/s0/00/hh/ef.jpg?1290746754,
-	followers_count = 35,
-	following = 0,
-	profile_text_color = #4b585e,
-	created_at = Fri Nov 26 04:36:44 +0000 2010,
-	favourites_count = 1,
-	profile_link_color = #3a9dcf,
-	description = 每一个优秀的人，都有一段沉默的时光。
- 
- 付出了很多努力，忍受孤单和寂寞。
- 
- 不抱怨，不诉苦。
- 
- 最后，渡过了这段感动自己的时光。
- 
- 如果你无法忍受孤独，就不要追逐梦想。
- 
- Fight。
- }
- 
- */

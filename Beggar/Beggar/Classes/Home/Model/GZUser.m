@@ -7,7 +7,17 @@
 //
 
 #import "GZUser.h"
+#import "MJExtension.h"
 
 @implementation GZUser
+
++ (NSDictionary *)replacedKeyFromPropertyName
+{
+    return @{
+             @"userID" : @"id",
+             @"selfDescription" : @"description",
+             @"isProtected" : @"protected"
+             };
+}
 
 @end

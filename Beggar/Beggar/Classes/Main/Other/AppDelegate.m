@@ -34,6 +34,9 @@
         self.window.rootViewController = [[GZOAuthViewController alloc] init];
     }
     
+    // 设置状态栏属性
+    application.statusBarStyle = UIStatusBarStyleLightContent;
+    
     return YES;
 }
 

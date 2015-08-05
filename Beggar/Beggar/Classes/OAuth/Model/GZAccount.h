@@ -26,6 +26,12 @@
  */
 @property (nonatomic, copy) NSString *session;
 
+/** 用户昵称 */
+@property (copy, nonatomic) NSString *userName;
+
+/** 用户ID */
+@property (copy, nonatomic) NSString *userID;
+
 + (instancetype)accountWithDict:(AFOAuth1Token *)access_token;
 
 @end

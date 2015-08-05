@@ -7,7 +7,15 @@
 //
 
 #import "GZStatus.h"
+#import "GZUser.h"
+#import "GZPhoto.h"
+#import "MJExtension.h"
 
 @implementation GZStatus
+
++ (NSDictionary *)replacedKeyFromPropertyName
+{
+    return @{@"msgID" : @"id"};
+}
 
 @end
