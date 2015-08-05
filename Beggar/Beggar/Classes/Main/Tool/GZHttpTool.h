@@ -20,6 +20,6 @@ typedef void (^HttpRequestFailure)(NSError *error);
 
 - (void)acquireOAuthAccessTokenWithSuccess:(void (^)())success failure:(void (^)(NSError *error))failure;
 
-+ (void)getWith:(NSString *)url success:(HttpRequestSuccess)success failure:(HttpRequestFailure)failure;
+- (void)getWithURL:(NSString *)url success:(HttpRequestSuccess)success failure:(HttpRequestFailure)failure;
 
 @end

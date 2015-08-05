@@ -12,7 +12,6 @@
 
 NSString * const kGZRequestTokenUrl = @"http://fanfou.com/oauth/request_token";
 NSString * const kGZAccessTokenUrl = @"http://fanfou.com/oauth/access_token";
-NSString * const kGZAuthorizeUrl = @"http://fanfou.com/oauth/authorize";
 NSString * const kGZConsumerKey = @"628995bdd46948e469a34742c88210fe";
 NSString * const kGZConsumerSecret = @"1f61c472c6f51d3c02bd98e21b804e79";
 
@@ -102,42 +101,37 @@ static id _instance;
 
 #pragma mark - 网络请求
 
-- (void)getWithURL:(NSString *)url success:(HttpRequestSuccess)success failure:(HttpRequestFailure)failure
+- (void)getWithURL:(NSString *)url  success:(HttpRequestSuccess)success failure:(HttpRequestFailure)failure
 {
-    
-}
-
-+ (void)requestWithMethod:(NSString *)method url:(NSString *)url params:(NSDictionary *)params success:(HttpRequestSuccess)success failure:(HttpRequestFailure)failure
-{
-    // 1.创建client
-    AFOAuth1Client *client = [[AFOAuth1Client alloc] initWithBaseURL:[NSURL URLWithString:url] key:kGZConsumerKey secret:kGZConsumerSecret];
-    
     GZAccount *account = [GZAccountTool account];
     AFOAuth1Token *accessToken = [[AFOAuth1Token alloc] initWithKey:account.key secret:account.secret session:account.session expiration:nil renewable:NO];
-    client.accessToken = accessToken;
+//    [self.OAuthClient acquireOAuthAccessTokenWithPath:url requestToken:accessToken accessMethod:@"GET" success:^(AFOAuth1Token *accessToken, id responseObject) {
+//        
+//        id json = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:nil];
+//        
+//        if (success) {
+//            success(json);
+//        }
+//    } failure:^(NSError *error) {
+//        if (failure) {
+//            failure(error);
+//        }
+//    }];
     
+    self.OAuthClient.accessToken = accessToken;
 
-}
-
-+ (void)getWith:(NSString *)url success:(HttpRequestSuccess)success failure:(HttpRequestFailure)failure
-{
-    AFOAuth1Client *client = [[AFOAuth1Client alloc] initWithBaseURL:[NSURL URLWithString:url] key:kGZConsumerKey secret:kGZConsumerSecret];
-    
-    GZAccount *account = [GZAccountTool account];
-    AFOAuth1Token *accessToken = [[AFOAuth1Token alloc] initWithKey:account.key secret:account.secret session:account.session expiration:nil renewable:NO];
-    client.accessToken = accessToken;
-    
-    [client getWithURL:url success:^(id responseObject) {
+    [self.OAuthClient getWith:url success:^(id responseObject) {
+        id json = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:nil];
         
         if (success) {
-            success(responseObject);
+            success(json);
         }
-        
     } failure:^(NSError *error) {
         if (failure) {
             failure(error);
         }
     }];
+    
 }
 
 
