@@ -18,3 +18,4 @@ NSString * const kGZCallBackUrl = @"http:///success";
 // API请求网址
 NSString * const kGZUserShow = @"http://api.fanfou.com/users/show.json";
 NSString * const kGZHomeTimeLine = @"http://api.fanfou.com/statuses/home_timeline.json";
+NSString * const kGZNotification = @"http://api.fanfou.com/account/notification.json";

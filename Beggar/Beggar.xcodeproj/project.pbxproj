@@ -36,6 +36,9 @@
 		E0A964E21B730B4100FBA5BC /* RegexKitLite.m in Sources */ = {isa = PBXBuildFile; fileRef = E0A964E11B730B4100FBA5BC /* RegexKitLite.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		E0A964E41B730D0400FBA5BC /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E0A964E31B730D0400FBA5BC /* libicucore.dylib */; };
 		E0A964E71B73235500FBA5BC /* GZIconView.m in Sources */ = {isa = PBXBuildFile; fileRef = E0A964E61B73235500FBA5BC /* GZIconView.m */; };
+		E0A964EA1B73862000FBA5BC /* GZTextPart.m in Sources */ = {isa = PBXBuildFile; fileRef = E0A964E91B73862000FBA5BC /* GZTextPart.m */; };
+		E0A964ED1B73862B00FBA5BC /* GZSpecial.m in Sources */ = {isa = PBXBuildFile; fileRef = E0A964EC1B73862B00FBA5BC /* GZSpecial.m */; };
+		E0A964F01B73890C00FBA5BC /* GZTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = E0A964EF1B73890C00FBA5BC /* GZTextView.m */; };
 		E0EFDD931B719C7C00508E8F /* AFOAuth1Client.m in Sources */ = {isa = PBXBuildFile; fileRef = E0EFDD921B719C7C00508E8F /* AFOAuth1Client.m */; };
 		E0EFDDA81B719C8800508E8F /* AFHTTPClient.m in Sources */ = {isa = PBXBuildFile; fileRef = E0EFDD961B719C8800508E8F /* AFHTTPClient.m */; };
 		E0EFDDA91B719C8800508E8F /* AFHTTPRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = E0EFDD981B719C8800508E8F /* AFHTTPRequestOperation.m */; };
@@ -123,6 +126,12 @@
 		E0A964E31B730D0400FBA5BC /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
 		E0A964E51B73235500FBA5BC /* GZIconView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GZIconView.h; sourceTree = "<group>"; };
 		E0A964E61B73235500FBA5BC /* GZIconView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GZIconView.m; sourceTree = "<group>"; };
+		E0A964E81B73862000FBA5BC /* GZTextPart.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GZTextPart.h; sourceTree = "<group>"; };
+		E0A964E91B73862000FBA5BC /* GZTextPart.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GZTextPart.m; sourceTree = "<group>"; };
+		E0A964EB1B73862B00FBA5BC /* GZSpecial.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GZSpecial.h; sourceTree = "<group>"; };
+		E0A964EC1B73862B00FBA5BC /* GZSpecial.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GZSpecial.m; sourceTree = "<group>"; };
+		E0A964EE1B73890C00FBA5BC /* GZTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GZTextView.h; sourceTree = "<group>"; };
+		E0A964EF1B73890C00FBA5BC /* GZTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GZTextView.m; sourceTree = "<group>"; };
 		E0EFDD911B719C7C00508E8F /* AFOAuth1Client.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFOAuth1Client.h; sourceTree = "<group>"; };
 		E0EFDD921B719C7C00508E8F /* AFOAuth1Client.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFOAuth1Client.m; sourceTree = "<group>"; };
 		E0EFDD951B719C8800508E8F /* AFHTTPClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPClient.h; sourceTree = "<group>"; };
@@ -408,6 +417,10 @@
 				E0F81CED1B70C74500E773CB /* GZStatus.m */,
 				E0F81CEF1B70C76100E773CB /* GZStatusFrame.h */,
 				E0F81CF01B70C76100E773CB /* GZStatusFrame.m */,
+				E0A964E81B73862000FBA5BC /* GZTextPart.h */,
+				E0A964E91B73862000FBA5BC /* GZTextPart.m */,
+				E0A964EB1B73862B00FBA5BC /* GZSpecial.h */,
+				E0A964EC1B73862B00FBA5BC /* GZSpecial.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -426,6 +439,8 @@
 				E0F81CF31B70C77B00E773CB /* GZStatusCell.m */,
 				E0A964E51B73235500FBA5BC /* GZIconView.h */,
 				E0A964E61B73235500FBA5BC /* GZIconView.m */,
+				E0A964EE1B73890C00FBA5BC /* GZTextView.h */,
+				E0A964EF1B73890C00FBA5BC /* GZTextView.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -815,6 +830,7 @@
 				E0EFDDAA1B719C8800508E8F /* AFImageRequestOperation.m in Sources */,
 				E09CB73B1B6EFC2700D6769F /* UIWindow+Extension.m in Sources */,
 				E0EFDDAD1B719C8800508E8F /* AFPropertyListRequestOperation.m in Sources */,
+				E0A964F01B73890C00FBA5BC /* GZTextView.m in Sources */,
 				E00C7B6A1B6F2075007DA072 /* UIImage+Extension.m in Sources */,
 				E0A964D81B72049600FBA5BC /* GZNavigationBar.m in Sources */,
 				E0EFDDA91B719C8800508E8F /* AFHTTPRequestOperation.m in Sources */,
@@ -823,6 +839,7 @@
 				E0F81CEB1B70C73700E773CB /* GZUser.m in Sources */,
 				E0A964E21B730B4100FBA5BC /* RegexKitLite.m in Sources */,
 				E0F81CF41B70C77B00E773CB /* GZStatusCell.m in Sources */,
+				E0A964EA1B73862000FBA5BC /* GZTextPart.m in Sources */,
 				E00C7B951B6F3C92007DA072 /* GZProfileViewController.m in Sources */,
 				E0F81CEE1B70C74500E773CB /* GZStatus.m in Sources */,
 				E09CB7371B6EFC2700D6769F /* NSString+Extension.m in Sources */,
@@ -835,6 +852,7 @@
 				E00C7B7E1B6F3B14007DA072 /* GZNavigationController.m in Sources */,
 				E0EFDDA81B719C8800508E8F /* AFHTTPClient.m in Sources */,
 				E0F81CE81B70BBB400E773CB /* GZAccount.m in Sources */,
+				E0A964ED1B73862B00FBA5BC /* GZSpecial.m in Sources */,
 				E0EFDDAE1B719C8800508E8F /* AFURLConnectionOperation.m in Sources */,
 				E00C7B621B6F0976007DA072 /* GZLeftMenu.m in Sources */,
 				E09CB7271B6EF5BF00D6769F /* main.m in Sources */,

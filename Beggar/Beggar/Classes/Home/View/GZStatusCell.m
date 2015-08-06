@@ -13,6 +13,7 @@
 #import "GZPhoto.h"
 #import "GZIconView.h"
 #import "UIImageView+WebCache.h"
+#import "GZTextView.h"
 
 @interface GZStatusCell ()
 
@@ -27,7 +28,7 @@
 /** 来源 */
 @property (nonatomic, weak) UILabel *sourceLabel;
 /** 正文 */
-@property (nonatomic, weak) UILabel *contentLabel;
+@property (nonatomic, weak) GZTextView *contentLabel;
 
 @end
 
@@ -74,9 +75,7 @@
     self.timeLabel = timeLabel;
     
     // 正文
-    UILabel *contentLabel = [[UILabel alloc] init];
-    contentLabel.font = GZStatusCellContentFont;
-    contentLabel.numberOfLines = 0;
+    GZTextView *contentLabel = [[GZTextView alloc] init];
     [self addSubview:contentLabel];
     self.contentLabel = contentLabel;
     
@@ -111,10 +110,13 @@
     
     // 时间
     self.timeLabel.text = status.created_at;
-    self.timeLabel.frame = statusFrame.timeLabelF;
+    CGSize timeS = [status.created_at sizeWithFont:GZStatusCellTimeFont];
+    CGFloat timeX = GZScreenW - timeS.width - kGZStatusCellInsert;
+    CGFloat timeY = CGRectGetMaxY(self.nameLabel.frame) - timeS.height;
+    self.timeLabel.frame = (CGRect){{timeX,timeY},timeS};
     
     // 正文
-    self.contentLabel.text = status.text;
+    self.contentLabel.attributedText = status.attributedText;
     self.contentLabel.frame = statusFrame.contentLabelF;
     
     // 配图

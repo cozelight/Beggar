@@ -17,6 +17,10 @@
 // 正文字体
 #define GZStatusCellContentFont [UIFont systemFontOfSize:14]
 
+extern NSInteger const kGZStatusCellInsert;
+extern NSInteger const kGZStatusIconWH;
+extern NSInteger const kGZStatusPhotoWH;
+
 
 @class GZStatus;
 

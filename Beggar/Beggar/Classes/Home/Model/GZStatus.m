@@ -11,6 +11,8 @@
 #import "GZPhoto.h"
 #import "MJExtension.h"
 #import "RegexKitLite.h"
+#import "GZTextPart.h"
+#import "GZSpecial.h"
 
 @implementation GZStatus
 
@@ -19,6 +21,7 @@
     return @{@"msgID" : @"id"};
 }
 
+#pragma mark - 重写时间get方法和来源set方法
 - (NSString *)created_at
 {
     NSDateFormatter *fmt = [[NSDateFormatter alloc] init];
@@ -84,5 +87,113 @@
     }
 }
 
+#pragma mark - 重写text set方法
+- (void)setText:(NSString *)text
+{
+    _text = [text copy];
+    
+    [self setAttributedTextWithText:text];
+}
+
+/**
+ *  普通文字 --> 属性文字
+ *
+ *  @param text 普通文字
+ *
+ */
+- (void)setAttributedTextWithText:(NSString *)text
+{
+    NSMutableAttributedString *attributedText = [[NSMutableAttributedString alloc] init];
+    
+    // 表情的规则
+//    NSString *emotionPattern = @"\\[[0-9a-zA-Z\\u4e00-\\u9fa5]+\\]";
+    // @的规则
+    NSString *atPattern = @"@[0-9a-zA-Z\\u4e00-\\u9fa5-_]+";
+    // #话题#的规则
+    NSString *topicPattern = @"#[0-9a-zA-Z\\u4e00-\\u9fa5]+#";
+    // url链接的规则
+    NSString *urlPattern = @"\\b(([\\w-]+://?|www[.])[^\\s()<>]+(?:\\([\\w\\d]+\\)|([^[:punct:]\\s]|/)))";
+    NSString *pattern = [NSString stringWithFormat:@"%@|%@|%@", atPattern, topicPattern, urlPattern];
+    
+    // 遍历所有的特殊字符串
+    NSMutableArray *parts = [NSMutableArray array];
+    [text enumerateStringsMatchedByRegex:pattern usingBlock:^(NSInteger captureCount, NSString *const __unsafe_unretained *capturedStrings, const NSRange *capturedRanges, volatile BOOL *const stop) {
+        if ((*capturedRanges).length == 0) return;
+        
+        GZTextPart *part = [[GZTextPart alloc] init];
+        part.special = YES;
+        part.text = *capturedStrings;
+//        part.emotion = [part.text hasPrefix:@"["] && [part.text hasSuffix:@"]"];
+        part.range = *capturedRanges;
+        [parts addObject:part];
+    }];
+    // 遍历所有的非特殊字符
+    [text enumerateStringsSeparatedByRegex:pattern usingBlock:^(NSInteger captureCount, NSString *const __unsafe_unretained *capturedStrings, const NSRange *capturedRanges, volatile BOOL *const stop) {
+        if ((*capturedRanges).length == 0) return;
+        
+        GZTextPart *part = [[GZTextPart alloc] init];
+        part.text = *capturedStrings;
+        part.range = *capturedRanges;
+        [parts addObject:part];
+    }];
+    
+    // 排序
+    // 系统是按照从小 -> 大的顺序排列对象
+    [parts sortUsingComparator:^NSComparisonResult(GZTextPart *part1, GZTextPart *part2) {
+        // NSOrderedAscending = -1L, NSOrderedSame, NSOrderedDescending
+        // 返回NSOrderedSame:两个一样大
+        // NSOrderedAscending(升序):part2>part1
+        // NSOrderedDescending(降序):part1>part2
+        if (part1.range.location > part2.range.location) {
+            // part1>part2
+            // part1放后面, part2放前面
+            return NSOrderedDescending;
+        }
+        // part1<part2
+        // part1放前面, part2放后面
+        return NSOrderedAscending;
+    }];
+    
+    UIFont *font = [UIFont systemFontOfSize:14];
+    NSMutableArray *specials = [NSMutableArray array];
+    // 按顺序拼接每一段文字
+    for (GZTextPart *part in parts) {
+        // 等会需要拼接的子串
+        NSAttributedString *substr = nil;
+//        if (part.isEmotion) { // 表情
+//            NSTextAttachment *attch = [[NSTextAttachment alloc] init];
+//            NSString *name = [HWEmotionTool emotionWithChs:part.text].png;
+//            if (name) { // 能找到对应的图片
+//                attch.image = [UIImage imageNamed:name];
+//                attch.bounds = CGRectMake(0, -3, font.lineHeight, font.lineHeight);
+//                substr = [NSAttributedString attributedStringWithAttachment:attch];
+//            } else { // 表情图片不存在
+//                substr = [[NSAttributedString alloc] initWithString:part.text];
+//            }
+//        } else
+        if (part.special) { // 非表情的特殊文字
+            substr = [[NSAttributedString alloc] initWithString:part.text attributes:@{
+                                                                                       NSForegroundColorAttributeName : GZColor(41, 96, 241)
+                                                                                       }];
+            
+            // 创建特殊对象
+            GZSpecial *s = [[GZSpecial alloc] init];
+            s.text = part.text;
+            NSUInteger loc = attributedText.length;
+            NSUInteger len = part.text.length;
+            s.range = NSMakeRange(loc, len);
+            [specials addObject:s];
+        } else { // 非特殊文字
+            substr = [[NSAttributedString alloc] initWithString:part.text];
+        }
+        [attributedText appendAttributedString:substr];
+    }
+    
+    // 一定要设置字体,保证计算出来的尺寸是正确的
+    [attributedText addAttribute:NSFontAttributeName value:font range:NSMakeRange(0, attributedText.length)];
+    [attributedText addAttribute:@"specials" value:specials range:NSMakeRange(0, 1)];
+    
+    _attributedText = attributedText;
+}
 
 @end

@@ -24,6 +24,9 @@
 /**	string	消息内容 */
 @property (copy, nonatomic) NSString *text;
 
+/**	string	消息内容 -- 带有属性的(特殊文字会高亮显示)*/
+@property (nonatomic, copy, readonly) NSAttributedString *attributedText;
+
 /**	string	消息来源 */
 @property (copy, nonatomic) NSString *source;
 

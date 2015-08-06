@@ -20,3 +20,5 @@ extern NSString * const kGZCallBackUrl;
 extern NSString * const kGZUserShow;
 /** 显示指定用户及其好友的消息 */
 extern NSString * const kGZHomeTimeLine;
+/** 返回未读的mentions, direct message 以及关注请求数量 */
+extern NSString * const kGZNotification;

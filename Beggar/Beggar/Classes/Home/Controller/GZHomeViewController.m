@@ -42,6 +42,11 @@
     
     // 4.集成上拉加载更多控件
     [self setupUpRefresh];
+    
+    // 5.获得未读数
+//    NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:560 target:self selector:@selector(setupUnreadCount) userInfo:nil repeats:YES];
+    // 主线程也会抽时间处理一下timer（不管主线程是否正在其他事件）
+//    [[NSRunLoop mainRunLoop] addTimer:timer forMode:NSRunLoopCommonModes];
 }
 
 - (NSMutableArray *)statusArray
@@ -127,6 +132,7 @@
         [self.tableView.header endRefreshing];
         
         // 显示最新微博的数量
+        [self showNewStatusCount:statusFrames.count];
         
     } failure:^(NSError *error) {
         GZLog(@"%@",error);
@@ -143,6 +149,56 @@
         [statusFrames addObject:statusFrame];
     }
     return statusFrames;
+}
+
+/**
+ *  显示最新微博的数量
+ *
+ *  @param count 最新微博的数量
+ */
+- (void)showNewStatusCount:(NSUInteger)count
+{
+    // 刷新成功(清空图标数字)
+    self.tabBarItem.badgeValue = nil;
+    
+    // 1.创建label
+    UILabel *label = [[UILabel alloc] init];
+    label.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"timeline_nav_bg"]];
+    label.width = [UIScreen mainScreen].bounds.size.width;
+    label.height = 35;
+    
+    // 2.设置其他属性
+    if (count == 0) {
+        label.text = @"没有新的消息，稍后再试";
+    } else {
+        label.text = [NSString stringWithFormat:@"共有%zd条新的消息", count];
+    }
+    label.textColor = [UIColor whiteColor];
+    label.textAlignment = NSTextAlignmentCenter;
+    label.font = [UIFont systemFontOfSize:16];
+    
+    // 3.添加
+    label.y = 64 - label.height;
+    // 将label添加到导航控制器的view中，并且是盖在导航栏下边
+    [self.navigationController.view insertSubview:label belowSubview:self.navigationController.navigationBar];
+    
+    // 4.动画
+    // 先利用1s的时间，让label往下移动一段距离
+    CGFloat duration = 1.0; // 动画的时间
+    [UIView animateWithDuration:duration animations:^{
+        label.transform = CGAffineTransformMakeTranslation(0, label.height);
+    } completion:^(BOOL finished) {
+        // 延迟1s后，再利用1s的时间，让label往上移动一段距离（回到一开始的状态）
+        CGFloat delay = 1.0; // 延迟1s
+        // UIViewAnimationOptionCurveLinear:匀速
+        [UIView animateWithDuration:duration delay:delay options:UIViewAnimationOptionCurveLinear animations:^{
+            label.transform = CGAffineTransformIdentity;
+        } completion:^(BOOL finished) {
+            [label removeFromSuperview];
+        }];
+    }];
+    
+    // 如果某个动画执行完毕后，又要回到动画执行前的状态，建议使用transform来做动画
 }
 
 #pragma mark - 集成上拉加载更多控件
@@ -176,6 +232,25 @@
         [self.tableView.footer endRefreshing];
     }];
 }
+
+#pragma mark - 获得未读消息数
+- (void)setupUnreadCount
+{
+    [[GZHttpTool shareHttpTool] getWithURL:kGZNotification params:nil success:^(id json) {
+        
+        NSString *mentions = [json[@"mentions"] description];
+        GZLog(@"json = %@, mentions = %@",json,mentions);
+        if ([mentions isEqualToString:@"0"]) { // 如果是0，得清空数字
+            self.tabBarItem.badgeValue = nil;
+        } else { // 非0情况
+            self.tabBarItem.badgeValue = mentions;
+        }
+    } failure:^(NSError *error) {
+        GZLog(@"%@",error);
+    }];
+}
+
+#pragma mark - TableView Delegate
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
