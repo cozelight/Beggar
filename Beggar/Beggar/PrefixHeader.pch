@@ -19,6 +19,8 @@
         #import "UIImage+Extension.h"
         #import "UIBarButtonItem+extension.h"
         #import "GZConst.h"
+        #import "NSString+Extension.h"
+        #import "NSDate+Extension.h"
 
         // 重新编写NSLog方法
         #ifdef DEBUG

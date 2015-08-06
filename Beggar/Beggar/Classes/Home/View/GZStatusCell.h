@@ -8,6 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
+@class GZStatusFrame;
+
 @interface GZStatusCell : UITableViewCell
+
+@property (strong, nonatomic) GZStatusFrame *statusFrame;
+
++ (instancetype)cellWithTableView:(UITableView *)tableView;
 
 @end

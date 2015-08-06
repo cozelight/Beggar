@@ -7,7 +7,131 @@
 //
 
 #import "GZStatusCell.h"
+#import "GZStatusFrame.h"
+#import "GZStatus.h"
+#import "GZUser.h"
+#import "GZPhoto.h"
+#import "GZIconView.h"
+#import "UIImageView+WebCache.h"
+
+@interface GZStatusCell ()
+
+/** 头像 */
+@property (nonatomic, weak) GZIconView *iconView;
+/** 配图 */
+@property (nonatomic, weak) UIImageView *photoView;
+/** 昵称 */
+@property (nonatomic, weak) UILabel *nameLabel;
+/** 时间 */
+@property (nonatomic, weak) UILabel *timeLabel;
+/** 来源 */
+@property (nonatomic, weak) UILabel *sourceLabel;
+/** 正文 */
+@property (nonatomic, weak) UILabel *contentLabel;
+
+@end
 
 @implementation GZStatusCell
+
++ (instancetype)cellWithTableView:(UITableView *)tableView
+{
+    static NSString *ID = @"statusCell";
+    GZStatusCell *cell = [tableView dequeueReusableCellWithIdentifier:ID];
+    if (!cell) {
+        cell = [[GZStatusCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:ID];
+    }
+    return cell;
+}
+
+- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
+{
+    if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
+        
+        // 初始化微博
+        [self setupStatus];
+    }
+    return self;
+}
+
+- (void)setupStatus
+{
+    // 头像
+    GZIconView *iconView = [[GZIconView alloc] init];
+    [self addSubview:iconView];
+    self.iconView = iconView;
+    
+    // 昵称
+    UILabel *nameLabel = [[UILabel alloc] init];
+    nameLabel.font = GZStatusCellNameFont;
+    [self addSubview:nameLabel];
+    self.nameLabel = nameLabel;
+    
+    // 时间
+    UILabel *timeLabel = [[UILabel alloc] init];
+    timeLabel.font = GZStatusCellTimeFont;
+    timeLabel.textColor = [UIColor grayColor];
+    [self addSubview:timeLabel];
+    self.timeLabel = timeLabel;
+    
+    // 正文
+    UILabel *contentLabel = [[UILabel alloc] init];
+    contentLabel.font = GZStatusCellContentFont;
+    contentLabel.numberOfLines = 0;
+    [self addSubview:contentLabel];
+    self.contentLabel = contentLabel;
+    
+    // 配图
+    UIImageView *photoView = [[UIImageView alloc] init];
+    photoView.contentMode = UIViewContentModeScaleAspectFill;
+    photoView.clipsToBounds = YES;
+    [self addSubview:photoView];
+    self.photoView = photoView;
+    
+    // 来源
+    UILabel *sourceLabel = [[UILabel alloc] init];
+    sourceLabel.font = GZStatusCellSourceFont;
+    sourceLabel.textColor = [UIColor grayColor];
+    [self addSubview:sourceLabel];
+    self.sourceLabel = sourceLabel;
+}
+
+- (void)setStatusFrame:(GZStatusFrame *)statusFrame
+{
+    _statusFrame = statusFrame;
+    GZStatus *status = statusFrame.status;
+    GZUser *user = status.user;
+    
+    // 头像
+    self.iconView.user = user;
+    self.iconView.frame = statusFrame.iconViewF;
+    
+    // 昵称
+    self.nameLabel.text = user.name;
+    self.nameLabel.frame = statusFrame.nameLabelF;
+    
+    // 时间
+    self.timeLabel.text = status.created_at;
+    self.timeLabel.frame = statusFrame.timeLabelF;
+    
+    // 正文
+    self.contentLabel.text = status.text;
+    self.contentLabel.frame = statusFrame.contentLabelF;
+    
+    // 配图
+    if (status.photo) { // 有图
+        
+        self.photoView.hidden = NO;
+        [self.photoView sd_setImageWithURL:[NSURL URLWithString:status.photo.imageurl] placeholderImage:[UIImage imageNamed:@"timeline_image_placeholder"]];
+        self.photoView.frame = statusFrame.photosViewF;
+        
+    } else { // 无图
+        self.photoView.hidden = YES;
+    }
+    
+    // 来源
+    self.sourceLabel.text = status.source;
+    self.sourceLabel.frame = statusFrame.sourceLabelF;
+    
+}
 
 @end

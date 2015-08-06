@@ -15,7 +15,8 @@
 #import "MJExtension.h"
 #import "MJRefresh.h"
 #import "GZAccountTool.h"
-#import "UIImageView+WebCache.h"
+#import "GZStatusCell.h"
+#import "GZStatusFrame.h"
 
 @interface GZHomeViewController ()
 
@@ -101,9 +102,9 @@
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
     params[@"count"] = @"20";
     
-    GZStatus *status = [self.statusArray firstObject];
-    if (status) {
-        params[@"since_id"] = status.msgID;
+    GZStatusFrame *statusFrame = [self.statusArray firstObject];
+    if (statusFrame) {
+        params[@"since_id"] = statusFrame.status.msgID;
     }
     
     [[GZHttpTool shareHttpTool] getWithURL:kGZHomeTimeLine params:params success:^(id json) {
@@ -111,12 +112,13 @@
         // 将 "微博字典"数组 转为 "微博模型"数组
         NSArray *statuses = [GZStatus objectArrayWithKeyValuesArray:json];
         
-        // 将 HWStatus数组 转为 HWStatusFrame数组
+        // 将 GZStatus数组 转为 GZStatusFrame数组
+        NSArray *statusFrames = [self statusFramesWithStatuses:statuses];
         
         // 将最新的微博数据，添加到总数组的最前面
-        NSRange range = NSMakeRange(0, statuses.count);
+        NSRange range = NSMakeRange(0, statusFrames.count);
         NSIndexSet *indexSet = [NSIndexSet indexSetWithIndexesInRange:range];
-        [self.statusArray insertObjects:statuses atIndexes:indexSet];
+        [self.statusArray insertObjects:statusFrames atIndexes:indexSet];
         
         // 刷新表格
         [self.tableView reloadData];
@@ -132,6 +134,17 @@
     }];
 }
 
+- (NSArray *)statusFramesWithStatuses:(NSArray *)statuses
+{
+    NSMutableArray *statusFrames = [NSMutableArray array];
+    for (GZStatus *status in statuses) {
+        GZStatusFrame *statusFrame = [[GZStatusFrame alloc] init];
+        statusFrame.status = status;
+        [statusFrames addObject:statusFrame];
+    }
+    return statusFrames;
+}
+
 #pragma mark - 集成上拉加载更多控件
 - (void)setupUpRefresh
 {
@@ -143,15 +156,17 @@
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
     params[@"count"] = @"20";
     
-    GZStatus *status = [self.statusArray lastObject];
-    if (status) {
-        params[@"max_id"] = status.msgID;
+    GZStatusFrame *statusFrame = [self.statusArray lastObject];
+    if (statusFrame) {
+        params[@"max_id"] = statusFrame.status.msgID;
     }
     
     [[GZHttpTool shareHttpTool] getWithURL:kGZHomeTimeLine params:params success:^(id json) {
         
         NSArray *statuses = [GZStatus objectArrayWithKeyValuesArray:json];
-        [self.statusArray addObjectsFromArray:statuses];
+        NSArray *statusFrames = [self statusFramesWithStatuses:statuses];
+        
+        [self.statusArray addObjectsFromArray:statusFrames];
         
         [self.tableView.footer endRefreshing];
         [self.tableView reloadData];
@@ -164,24 +179,22 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    GZLog(@"%zd",self.statusArray.count);
     return self.statusArray.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *ID = @"cell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:ID];
-    if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:ID];
-    }
+    GZStatusCell *cell = [GZStatusCell cellWithTableView:tableView];
     
-    GZStatus *status = self.statusArray[indexPath.row];
-    cell.textLabel.text = status.user.name;
-    cell.detailTextLabel.text = status.text;
-    [cell.imageView sd_setImageWithURL:[NSURL URLWithString:status.user.profile_image_url] placeholderImage:[UIImage imageNamed:@"timeline_item_pic_icon"]];
+    cell.statusFrame = self.statusArray[indexPath.row];
     
     return cell;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    GZStatusFrame *statusFrame = self.statusArray[indexPath.row];
+    return statusFrame.cellHeight;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
