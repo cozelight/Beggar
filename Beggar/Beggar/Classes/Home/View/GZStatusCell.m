@@ -70,7 +70,6 @@
     // 时间
     UILabel *timeLabel = [[UILabel alloc] init];
     timeLabel.font = GZStatusCellTimeFont;
-    timeLabel.textColor = [UIColor grayColor];
     [self addSubview:timeLabel];
     self.timeLabel = timeLabel;
     
@@ -110,6 +109,7 @@
     
     // 时间
     self.timeLabel.text = status.created_at;
+    self.timeLabel.textColor = status.timeColor ? GZAppearTextColor : [UIColor grayColor];
     CGSize timeS = [status.created_at sizeWithFont:GZStatusCellTimeFont];
     CGFloat timeX = GZScreenW - timeS.width - kGZStatusCellInsert;
     CGFloat timeY = CGRectGetMaxY(self.nameLabel.frame) - timeS.height;

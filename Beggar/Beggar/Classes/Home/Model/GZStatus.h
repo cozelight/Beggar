@@ -15,6 +15,9 @@
 /**	string	消息发送时间 */
 @property (copy, nonatomic) NSString *created_at;
 
+/**	string	消息发送时间是否有颜色 */
+@property (assign, nonatomic) BOOL timeColor;
+
 /** id	string	消息id */
 @property (copy, nonatomic) NSString *msgID;
 

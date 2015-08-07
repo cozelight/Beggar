@@ -17,10 +17,18 @@
 #import "GZAccountTool.h"
 #import "GZStatusCell.h"
 #import "GZStatusFrame.h"
+#import "XMGStatusBarHUD.h"
+#import "GZStatusTool.h"
 
-@interface GZHomeViewController ()
+@interface GZHomeViewController () <UISearchBarDelegate, UISearchDisplayDelegate>
 
 @property (strong, nonatomic) NSMutableArray *statusArray;
+
+@property (strong, nonatomic) NSMutableArray *filteredStatuses;
+
+@property(nonatomic, strong, readwrite) UISearchBar *searchBar;
+
+@property(nonatomic, strong) UISearchDisplayController *strongSearchDisplayController;
 
 @end
 
@@ -43,7 +51,10 @@
     // 4.集成上拉加载更多控件
     [self setupUpRefresh];
     
-    // 5.获得未读数
+    // 5.添加搜索栏
+    [self setupSearchBar];
+    
+    // 6.获得未读数
 //    NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:560 target:self selector:@selector(setupUnreadCount) userInfo:nil repeats:YES];
     // 主线程也会抽时间处理一下timer（不管主线程是否正在其他事件）
 //    [[NSRunLoop mainRunLoop] addTimer:timer forMode:NSRunLoopCommonModes];
@@ -110,15 +121,15 @@
     GZStatusFrame *statusFrame = [self.statusArray firstObject];
     if (statusFrame) {
         params[@"since_id"] = statusFrame.status.msgID;
+        params[@"rawid"] = @(statusFrame.status.rawid);
     }
     
-    [[GZHttpTool shareHttpTool] getWithURL:kGZHomeTimeLine params:params success:^(id json) {
-        
+    void (^dealingResult)(NSArray *) = ^(NSArray *statuses){
         // 将 "微博字典"数组 转为 "微博模型"数组
-        NSArray *statuses = [GZStatus objectArrayWithKeyValuesArray:json];
+        NSArray *newStatuses = [GZStatus objectArrayWithKeyValuesArray:statuses];
         
         // 将 GZStatus数组 转为 GZStatusFrame数组
-        NSArray *statusFrames = [self statusFramesWithStatuses:statuses];
+        NSArray *statusFrames = [self statusFramesWithStatuses:newStatuses];
         
         // 将最新的微博数据，添加到总数组的最前面
         NSRange range = NSMakeRange(0, statusFrames.count);
@@ -131,13 +142,30 @@
         // 结束刷新
         [self.tableView.header endRefreshing];
         
-        // 显示最新微博的数量
-        [self showNewStatusCount:statusFrames.count];
         
-    } failure:^(NSError *error) {
-        GZLog(@"%@",error);
-        [self.tableView.header endRefreshing];
-    }];
+    };
+    
+    NSArray *statuses = [GZStatusTool statusesWithParams:params];
+    if (statuses.count) {
+        dealingResult(statuses);
+    } else {
+        [[GZHttpTool shareHttpTool] getWithURL:kGZHomeTimeLine params:params success:^(id json) {
+            
+            //        GZLog(@"%@",json);
+            // 存入数据库
+            [GZStatusTool saveStatuses:json];
+            
+            dealingResult(json);
+            
+            // 显示最新微博的数量
+            NSArray *newStatuses = [GZStatus objectArrayWithKeyValuesArray:json];
+            [self showNewStatusCount:newStatuses.count];
+            
+        } failure:^(NSError *error) {
+            GZLog(@"%@",error);
+            [self.tableView.header endRefreshing];
+        }];
+    }
 }
 
 - (NSArray *)statusFramesWithStatuses:(NSArray *)statuses
@@ -163,7 +191,7 @@
     
     // 1.创建label
     UILabel *label = [[UILabel alloc] init];
-    label.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"timeline_nav_bg"]];
+    label.backgroundColor = GZAppearColor;
     label.width = [UIScreen mainScreen].bounds.size.width;
     label.height = 35;
     
@@ -215,22 +243,34 @@
     GZStatusFrame *statusFrame = [self.statusArray lastObject];
     if (statusFrame) {
         params[@"max_id"] = statusFrame.status.msgID;
+        params[@"rawid"] = @(statusFrame.status.rawid - 1);
     }
     
-    [[GZHttpTool shareHttpTool] getWithURL:kGZHomeTimeLine params:params success:^(id json) {
-        
-        NSArray *statuses = [GZStatus objectArrayWithKeyValuesArray:json];
-        NSArray *statusFrames = [self statusFramesWithStatuses:statuses];
+    void (^dealingResult)(NSArray *) = ^(NSArray *statuses){
+        NSArray *newStatuses = [GZStatus objectArrayWithKeyValuesArray:statuses];
+        NSArray *statusFrames = [self statusFramesWithStatuses:newStatuses];
         
         [self.statusArray addObjectsFromArray:statusFrames];
         
         [self.tableView.footer endRefreshing];
         [self.tableView reloadData];
-        
-    } failure:^(NSError *error) {
-        GZLog(@"%@",error);
-        [self.tableView.footer endRefreshing];
-    }];
+
+    };
+    
+    NSArray *statuses = [GZStatusTool statusesWithParams:params];
+    if (statuses.count) {
+        dealingResult(statuses);
+    } else {
+        [[GZHttpTool shareHttpTool] getWithURL:kGZHomeTimeLine params:params success:^(id json) {
+            
+            [GZStatusTool saveStatuses:json];
+            dealingResult(json);
+            
+        } failure:^(NSError *error) {
+            GZLog(@"%@",error);
+            [self.tableView.footer endRefreshing];
+        }];
+    }
 }
 
 #pragma mark - 获得未读消息数
@@ -250,26 +290,83 @@
     }];
 }
 
+#pragma mark - 添加搜索栏
+- (void)setupSearchBar
+{
+    self.searchBar = [[UISearchBar alloc] initWithFrame:CGRectZero];
+    self.searchBar.placeholder = @"搜索时间轴";
+    self.searchBar.delegate = self;
+    
+    [self.searchBar sizeToFit];
+    
+    self.strongSearchDisplayController = [[UISearchDisplayController alloc] initWithSearchBar:self.searchBar contentsController:self];
+    self.searchDisplayController.searchResultsDataSource = self;
+    self.searchDisplayController.searchResultsDelegate = self;
+    self.searchDisplayController.delegate = self;
+    
+    self.tableView.tableHeaderView = self.searchBar;
+    self.tableView.contentOffset = CGPointMake(0, CGRectGetHeight(self.searchBar.bounds));
+}
+
+#pragma mark - Search Delegate
+
+- (void)searchDisplayControllerWillBeginSearch:(UISearchDisplayController *)controller
+{
+    self.filteredStatuses = self.statusArray;
+}
+
+- (void)searchDisplayControllerDidEndSearch:(UISearchDisplayController *)controller
+{
+    self.filteredStatuses = nil;
+}
+
+- (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchString:(NSString *)searchString
+{
+    if (searchString.length) {
+        NSArray *resultStatus = [GZStatusTool searchStatusesWithText:searchString];
+        
+        // 将 "微博字典"数组 转为 "微博模型"数组
+        NSArray *newStatuses = [GZStatus objectArrayWithKeyValuesArray:resultStatus];
+        
+        // 将 GZStatus数组 转为 GZStatusFrame数组
+        self.filteredStatuses = (NSMutableArray *)[self statusFramesWithStatuses:newStatuses];
+    }
+    return YES;
+}
+
 #pragma mark - TableView Delegate
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return self.statusArray.count;
+    if (tableView == self.tableView) {
+        return self.statusArray.count;
+    } else {
+        return self.filteredStatuses.count;
+    }
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     GZStatusCell *cell = [GZStatusCell cellWithTableView:tableView];
-    
-    cell.statusFrame = self.statusArray[indexPath.row];
+    if (tableView == self.tableView) {
+        cell.statusFrame = self.statusArray[indexPath.row];
+    } else {
+        cell.statusFrame = self.filteredStatuses[indexPath.row];
+    }
     
     return cell;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    GZStatusFrame *statusFrame = self.statusArray[indexPath.row];
-    return statusFrame.cellHeight;
+    if (tableView == self.tableView) {
+        GZStatusFrame *statusFrame = self.statusArray[indexPath.row];
+        return statusFrame.cellHeight;
+    } else {
+        GZStatusFrame *statusFrame = self.filteredStatuses[indexPath.row];
+        return statusFrame.cellHeight;
+    }
+    
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath

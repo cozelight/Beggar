@@ -19,7 +19,7 @@
     UIImageView *iconView = [[UIImageView alloc] init];
     [iconView sd_setImageWithURL:[NSURL URLWithString:self.user.profile_image_url_large] placeholderImage:[UIImage imageNamed:@"timeline_item_pic_icon"]];
 
-    self.image = [iconView.image circleImageWithBorderWidth:0.1 borderColor:[UIColor grayColor]];
+    self.image = [iconView.image circleImageWithBorderWidth:0.2 borderColor:[UIColor blackColor]];
     
 }
 

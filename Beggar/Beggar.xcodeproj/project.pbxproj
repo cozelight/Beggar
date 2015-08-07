@@ -39,6 +39,10 @@
 		E0A964EA1B73862000FBA5BC /* GZTextPart.m in Sources */ = {isa = PBXBuildFile; fileRef = E0A964E91B73862000FBA5BC /* GZTextPart.m */; };
 		E0A964ED1B73862B00FBA5BC /* GZSpecial.m in Sources */ = {isa = PBXBuildFile; fileRef = E0A964EC1B73862B00FBA5BC /* GZSpecial.m */; };
 		E0A964F01B73890C00FBA5BC /* GZTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = E0A964EF1B73890C00FBA5BC /* GZTextView.m */; };
+		E0A964FE1B74398100FBA5BC /* XMGStatusBarHUD.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E0A964FB1B74398100FBA5BC /* XMGStatusBarHUD.bundle */; };
+		E0A964FF1B74398100FBA5BC /* XMGStatusBarHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = E0A964FD1B74398100FBA5BC /* XMGStatusBarHUD.m */; };
+		E0A965271B7445B000FBA5BC /* GZStatusTool.m in Sources */ = {isa = PBXBuildFile; fileRef = E0A965261B7445B000FBA5BC /* GZStatusTool.m */; };
+		E0A9652C1B74E4C900FBA5BC /* GZSearchTableController.m in Sources */ = {isa = PBXBuildFile; fileRef = E0A9652B1B74E4C900FBA5BC /* GZSearchTableController.m */; };
 		E0EFDD931B719C7C00508E8F /* AFOAuth1Client.m in Sources */ = {isa = PBXBuildFile; fileRef = E0EFDD921B719C7C00508E8F /* AFOAuth1Client.m */; };
 		E0EFDDA81B719C8800508E8F /* AFHTTPClient.m in Sources */ = {isa = PBXBuildFile; fileRef = E0EFDD961B719C8800508E8F /* AFHTTPClient.m */; };
 		E0EFDDA91B719C8800508E8F /* AFHTTPRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = E0EFDD981B719C8800508E8F /* AFHTTPRequestOperation.m */; };
@@ -132,6 +136,13 @@
 		E0A964EC1B73862B00FBA5BC /* GZSpecial.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GZSpecial.m; sourceTree = "<group>"; };
 		E0A964EE1B73890C00FBA5BC /* GZTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GZTextView.h; sourceTree = "<group>"; };
 		E0A964EF1B73890C00FBA5BC /* GZTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GZTextView.m; sourceTree = "<group>"; };
+		E0A964FB1B74398100FBA5BC /* XMGStatusBarHUD.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = XMGStatusBarHUD.bundle; sourceTree = "<group>"; };
+		E0A964FC1B74398100FBA5BC /* XMGStatusBarHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XMGStatusBarHUD.h; sourceTree = "<group>"; };
+		E0A964FD1B74398100FBA5BC /* XMGStatusBarHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XMGStatusBarHUD.m; sourceTree = "<group>"; };
+		E0A965251B7445B000FBA5BC /* GZStatusTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GZStatusTool.h; sourceTree = "<group>"; };
+		E0A965261B7445B000FBA5BC /* GZStatusTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GZStatusTool.m; sourceTree = "<group>"; };
+		E0A9652A1B74E4C900FBA5BC /* GZSearchTableController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GZSearchTableController.h; sourceTree = "<group>"; };
+		E0A9652B1B74E4C900FBA5BC /* GZSearchTableController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GZSearchTableController.m; sourceTree = "<group>"; };
 		E0EFDD911B719C7C00508E8F /* AFOAuth1Client.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFOAuth1Client.h; sourceTree = "<group>"; };
 		E0EFDD921B719C7C00508E8F /* AFOAuth1Client.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFOAuth1Client.m; sourceTree = "<group>"; };
 		E0EFDD951B719C8800508E8F /* AFHTTPClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPClient.h; sourceTree = "<group>"; };
@@ -213,6 +224,8 @@
 				E00C7B7A1B6F3B14007DA072 /* GZTabBarController.m */,
 				E00C7B751B6F3B14007DA072 /* GZNavigationController.h */,
 				E00C7B761B6F3B14007DA072 /* GZNavigationController.m */,
+				E0A9652A1B74E4C900FBA5BC /* GZSearchTableController.h */,
+				E0A9652B1B74E4C900FBA5BC /* GZSearchTableController.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -276,6 +289,7 @@
 		E075181A1B6FAFB2006A34DD /* Lib */ = {
 			isa = PBXGroup;
 			children = (
+				E0A964FA1B74398100FBA5BC /* XMGStatusBarHUD */,
 				E0A964DF1B730B4100FBA5BC /* RegexKitLite */,
 				E0EFDD941B719C8800508E8F /* AFNetworking */,
 				E0EFDD901B719C7C00508E8F /* AFOAuth1Client */,
@@ -428,6 +442,8 @@
 		E09CB7071B6EF5BF00D6769F /* Tool */ = {
 			isa = PBXGroup;
 			children = (
+				E0A965251B7445B000FBA5BC /* GZStatusTool.h */,
+				E0A965261B7445B000FBA5BC /* GZStatusTool.m */,
 			);
 			path = Tool;
 			sourceTree = "<group>";
@@ -649,6 +665,16 @@
 			path = RegexKitLite;
 			sourceTree = "<group>";
 		};
+		E0A964FA1B74398100FBA5BC /* XMGStatusBarHUD */ = {
+			isa = PBXGroup;
+			children = (
+				E0A964FB1B74398100FBA5BC /* XMGStatusBarHUD.bundle */,
+				E0A964FC1B74398100FBA5BC /* XMGStatusBarHUD.h */,
+				E0A964FD1B74398100FBA5BC /* XMGStatusBarHUD.m */,
+			);
+			path = XMGStatusBarHUD;
+			sourceTree = "<group>";
+		};
 		E0EFDD901B719C7C00508E8F /* AFOAuth1Client */ = {
 			isa = PBXGroup;
 			children = (
@@ -767,6 +793,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E0A964FE1B74398100FBA5BC /* XMGStatusBarHUD.bundle in Resources */,
 				E049389A1B61FF5B0039F3F6 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -818,6 +845,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E0A965271B7445B000FBA5BC /* GZStatusTool.m in Sources */,
 				E00C7B8F1B6F3C0C007DA072 /* GZHomeViewController.m in Sources */,
 				E09CB7261B6EF5BF00D6769F /* AppDelegate.m in Sources */,
 				E00C7BEC1B6F647B007DA072 /* GZHttpTool.m in Sources */,
@@ -834,7 +862,9 @@
 				E00C7B6A1B6F2075007DA072 /* UIImage+Extension.m in Sources */,
 				E0A964D81B72049600FBA5BC /* GZNavigationBar.m in Sources */,
 				E0EFDDA91B719C8800508E8F /* AFHTTPRequestOperation.m in Sources */,
+				E0A9652C1B74E4C900FBA5BC /* GZSearchTableController.m in Sources */,
 				E00C7BE91B6F6429007DA072 /* GZOAuthViewController.m in Sources */,
+				E0A964FF1B74398100FBA5BC /* XMGStatusBarHUD.m in Sources */,
 				E09CB7381B6EFC2700D6769F /* UIBarButtonItem+extension.m in Sources */,
 				E0F81CEB1B70C73700E773CB /* GZUser.m in Sources */,
 				E0A964E21B730B4100FBA5BC /* RegexKitLite.m in Sources */,
