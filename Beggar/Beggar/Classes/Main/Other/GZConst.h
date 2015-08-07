@@ -22,3 +22,5 @@ extern NSString * const kGZUserShow;
 extern NSString * const kGZHomeTimeLine;
 /** 返回未读的mentions, direct message 以及关注请求数量 */
 extern NSString * const kGZNotification;
+/** 按照时间先后顺序显示消息上下文 */
+extern NSString * const kGZContextTimeLine;

@@ -20,15 +20,7 @@
 #import "XMGStatusBarHUD.h"
 #import "GZStatusTool.h"
 
-@interface GZHomeViewController () <UISearchBarDelegate, UISearchDisplayDelegate>
-
-@property (strong, nonatomic) NSMutableArray *statusArray;
-
-@property (strong, nonatomic) NSMutableArray *filteredStatuses;
-
-@property(nonatomic, strong, readwrite) UISearchBar *searchBar;
-
-@property(nonatomic, strong) UISearchDisplayController *strongSearchDisplayController;
+@interface GZHomeViewController ()
 
 @end
 
@@ -51,21 +43,13 @@
     // 4.集成上拉加载更多控件
     [self setupUpRefresh];
     
-    // 5.添加搜索栏
-    [self setupSearchBar];
+    // 5.设置搜索栏显示文字
+    self.searchBar.placeholder = @"搜索时间轴";
     
     // 6.获得未读数
 //    NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:560 target:self selector:@selector(setupUnreadCount) userInfo:nil repeats:YES];
     // 主线程也会抽时间处理一下timer（不管主线程是否正在其他事件）
 //    [[NSRunLoop mainRunLoop] addTimer:timer forMode:NSRunLoopCommonModes];
-}
-
-- (NSMutableArray *)statusArray
-{
-    if (!_statusArray) {
-        _statusArray = [[NSMutableArray alloc] init];
-    }
-    return _statusArray;
 }
 
 #pragma makr - 设置导航栏
@@ -166,17 +150,6 @@
             [self.tableView.header endRefreshing];
         }];
     }
-}
-
-- (NSArray *)statusFramesWithStatuses:(NSArray *)statuses
-{
-    NSMutableArray *statusFrames = [NSMutableArray array];
-    for (GZStatus *status in statuses) {
-        GZStatusFrame *statusFrame = [[GZStatusFrame alloc] init];
-        statusFrame.status = status;
-        [statusFrames addObject:statusFrame];
-    }
-    return statusFrames;
 }
 
 /**
@@ -290,84 +263,7 @@
     }];
 }
 
-#pragma mark - 添加搜索栏
-- (void)setupSearchBar
-{
-    self.searchBar = [[UISearchBar alloc] initWithFrame:CGRectZero];
-    self.searchBar.placeholder = @"搜索时间轴";
-    self.searchBar.delegate = self;
-    
-    [self.searchBar sizeToFit];
-    
-    self.strongSearchDisplayController = [[UISearchDisplayController alloc] initWithSearchBar:self.searchBar contentsController:self];
-    self.searchDisplayController.searchResultsDataSource = self;
-    self.searchDisplayController.searchResultsDelegate = self;
-    self.searchDisplayController.delegate = self;
-    
-    self.tableView.tableHeaderView = self.searchBar;
-    self.tableView.contentOffset = CGPointMake(0, CGRectGetHeight(self.searchBar.bounds));
-}
-
-#pragma mark - Search Delegate
-
-- (void)searchDisplayControllerWillBeginSearch:(UISearchDisplayController *)controller
-{
-    self.filteredStatuses = self.statusArray;
-}
-
-- (void)searchDisplayControllerDidEndSearch:(UISearchDisplayController *)controller
-{
-    self.filteredStatuses = nil;
-}
-
-- (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchString:(NSString *)searchString
-{
-    if (searchString.length) {
-        NSArray *resultStatus = [GZStatusTool searchStatusesWithText:searchString];
-        
-        // 将 "微博字典"数组 转为 "微博模型"数组
-        NSArray *newStatuses = [GZStatus objectArrayWithKeyValuesArray:resultStatus];
-        
-        // 将 GZStatus数组 转为 GZStatusFrame数组
-        self.filteredStatuses = (NSMutableArray *)[self statusFramesWithStatuses:newStatuses];
-    }
-    return YES;
-}
-
-#pragma mark - TableView Delegate
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    if (tableView == self.tableView) {
-        return self.statusArray.count;
-    } else {
-        return self.filteredStatuses.count;
-    }
-}
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    GZStatusCell *cell = [GZStatusCell cellWithTableView:tableView];
-    if (tableView == self.tableView) {
-        cell.statusFrame = self.statusArray[indexPath.row];
-    } else {
-        cell.statusFrame = self.filteredStatuses[indexPath.row];
-    }
-    
-    return cell;
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (tableView == self.tableView) {
-        GZStatusFrame *statusFrame = self.statusArray[indexPath.row];
-        return statusFrame.cellHeight;
-    } else {
-        GZStatusFrame *statusFrame = self.filteredStatuses[indexPath.row];
-        return statusFrame.cellHeight;
-    }
-    
-}
+#pragma mark tableViewDelegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {

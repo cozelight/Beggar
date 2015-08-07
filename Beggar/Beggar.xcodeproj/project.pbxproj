@@ -310,6 +310,7 @@
 			isa = PBXGroup;
 			children = (
 				E09CB6FA1B6EF5BF00D6769F /* Compose */,
+				E0A965321B74F66300FBA5BC /* DetailStatus */,
 				E09CB6FF1B6EF5BF00D6769F /* Discover */,
 				E09CB7041B6EF5BF00D6769F /* Home */,
 				E09CB7091B6EF5BF00D6769F /* Main */,
@@ -673,6 +674,45 @@
 				E0A964FD1B74398100FBA5BC /* XMGStatusBarHUD.m */,
 			);
 			path = XMGStatusBarHUD;
+			sourceTree = "<group>";
+		};
+		E0A965321B74F66300FBA5BC /* DetailStatus */ = {
+			isa = PBXGroup;
+			children = (
+				E0A965331B74F66300FBA5BC /* Controller */,
+				E0A965341B74F66300FBA5BC /* Model */,
+				E0A965351B74F66300FBA5BC /* Tool */,
+				E0A965361B74F66300FBA5BC /* View */,
+			);
+			path = DetailStatus;
+			sourceTree = "<group>";
+		};
+		E0A965331B74F66300FBA5BC /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		E0A965341B74F66300FBA5BC /* Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		E0A965351B74F66300FBA5BC /* Tool */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Tool;
+			sourceTree = "<group>";
+		};
+		E0A965361B74F66300FBA5BC /* View */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = View;
 			sourceTree = "<group>";
 		};
 		E0EFDD901B719C7C00508E8F /* AFOAuth1Client */ = {

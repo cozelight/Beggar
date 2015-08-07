@@ -6,8 +6,8 @@
 //  Copyright (c) 2015年 GanZhen. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "GZSearchTableController.h"
 
-@interface GZHomeViewController : UITableViewController
+@interface GZHomeViewController : GZSearchTableController
 
 @end

@@ -5,96 +5,134 @@
 //  Created by Madao on 15/8/7.
 //  Copyright (c) 2015年 GanZhen. All rights reserved.
 //
-
 #import "GZSearchTableController.h"
+#import "GZHttpTool.h"
+#import "GZUser.h"
+#import "GZPhoto.h"
+#import "GZStatus.h"
+#import "MJExtension.h"
+#import "GZStatusCell.h"
+#import "GZStatusFrame.h"
+#import "GZStatusTool.h"
 
-@interface GZSearchTableController ()
+@interface GZSearchTableController () <UISearchBarDelegate, UISearchDisplayDelegate>
+
+
+@property(nonatomic, strong) UISearchDisplayController *strongSearchDisplayController;
 
 @end
 
 @implementation GZSearchTableController
 
-- (void)viewDidLoad {
+#pragma mark - 初始化
+- (void)viewDidLoad
+{
     [super viewDidLoad];
     
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
+    // 5.添加搜索栏
+    [self setupSearchBar];
     
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    // 6.获得未读数
+    //    NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:560 target:self selector:@selector(setupUnreadCount) userInfo:nil repeats:YES];
+    // 主线程也会抽时间处理一下timer（不管主线程是否正在其他事件）
+    //    [[NSRunLoop mainRunLoop] addTimer:timer forMode:NSRunLoopCommonModes];
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+- (NSMutableArray *)statusArray
+{
+    if (!_statusArray) {
+        _statusArray = [[NSMutableArray alloc] init];
+    }
+    return _statusArray;
 }
 
-#pragma mark - Table view data source
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-#warning Potentially incomplete method implementation.
-    // Return the number of sections.
-    return 0;
+- (NSArray *)statusFramesWithStatuses:(NSArray *)statuses
+{
+    NSMutableArray *statusFrames = [NSMutableArray array];
+    for (GZStatus *status in statuses) {
+        GZStatusFrame *statusFrame = [[GZStatusFrame alloc] init];
+        statusFrame.status = status;
+        [statusFrames addObject:statusFrame];
+    }
+    return statusFrames;
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-#warning Incomplete method implementation.
-    // Return the number of rows in the section.
-    return 0;
-}
+#pragma mark - 添加搜索栏
+- (void)setupSearchBar
+{
+    self.searchBar = [[UISearchBar alloc] initWithFrame:CGRectZero];
+    self.searchBar.delegate = self;
 
-/*
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:<#@"reuseIdentifier"#> forIndexPath:indexPath];
+    [self.searchBar sizeToFit];
     
-    // Configure the cell...
+    self.strongSearchDisplayController = [[UISearchDisplayController alloc] initWithSearchBar:self.searchBar contentsController:self];
+    self.searchDisplayController.searchResultsDataSource = self;
+    self.searchDisplayController.searchResultsDelegate = self;
+    self.searchDisplayController.delegate = self;
     
+    self.tableView.tableHeaderView = self.searchBar;
+    self.tableView.contentOffset = CGPointMake(0, CGRectGetHeight(self.searchBar.bounds));
+}
+
+#pragma mark - Search Delegate
+
+- (void)searchDisplayControllerWillBeginSearch:(UISearchDisplayController *)controller
+{
+    self.filteredStatuses = self.statusArray;
+}
+
+- (void)searchDisplayControllerDidEndSearch:(UISearchDisplayController *)controller
+{
+    self.filteredStatuses = nil;
+}
+
+- (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchString:(NSString *)searchString
+{
+    if (searchString.length) {
+        NSArray *resultStatus = [GZStatusTool searchStatusesWithText:searchString];
+        
+        // 将 "微博字典"数组 转为 "微博模型"数组
+        NSArray *newStatuses = [GZStatus objectArrayWithKeyValuesArray:resultStatus];
+        
+        // 将 GZStatus数组 转为 GZStatusFrame数组
+        self.filteredStatuses = (NSMutableArray *)[self statusFramesWithStatuses:newStatuses];
+    }
+    return YES;
+}
+
+#pragma mark - TableView Delegate
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    if (tableView == self.tableView) {
+        return self.statusArray.count;
+    } else {
+        return self.filteredStatuses.count;
+    }
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    GZStatusCell *cell = [GZStatusCell cellWithTableView:tableView];
+    if (tableView == self.tableView) {
+        cell.statusFrame = self.statusArray[indexPath.row];
+    } else {
+        cell.statusFrame = self.filteredStatuses[indexPath.row];
+    }
     return cell;
 }
-*/
 
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (tableView == self.tableView) {
+        GZStatusFrame *statusFrame = self.statusArray[indexPath.row];
+        return statusFrame.cellHeight;
+    } else {
+        GZStatusFrame *statusFrame = self.filteredStatuses[indexPath.row];
+        return statusFrame.cellHeight;
+    }
+    
 }
-*/
-
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

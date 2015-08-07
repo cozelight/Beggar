@@ -73,7 +73,7 @@
             return [fmt stringFromDate:createDate];
         }
     } else { // 非今年
-        self.timeColor = NO;
+//        self.timeColor = NO;
         fmt.dateFormat = @"yyyy-MM-dd";
         return [fmt stringFromDate:createDate];
     }
