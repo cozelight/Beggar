@@ -18,7 +18,9 @@
     
     // 2.设置button图片
     [Btn setBackgroundImage:[UIImage imageNamed:image] forState:UIControlStateNormal];
-    [Btn setBackgroundImage:[UIImage imageNamed:hightlightImage] forState:UIControlStateHighlighted];
+    if (hightlightImage.length) {
+        [Btn setBackgroundImage:[UIImage imageNamed:hightlightImage] forState:UIControlStateHighlighted];
+    }
     Btn.size = Btn.currentBackgroundImage.size;
     
     // 3.创建buttonItem

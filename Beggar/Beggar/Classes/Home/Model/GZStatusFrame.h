@@ -44,6 +44,7 @@ extern NSInteger const kGZStatusPhotoWH;
 
 /** cell的高度 */
 @property (nonatomic, assign) CGFloat cellHeight;
-
+/** 自己的frame */
+@property (nonatomic, assign) CGRect frame;
 
 @end

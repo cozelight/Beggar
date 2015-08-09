@@ -7,11 +7,12 @@
     {
       "idiom" : "universal",
       "scale" : "2x",
-      "filename" : "navigationbar_back@2x.png"
+      "filename" : "timeline_more_button_comment@2x.png"
     },
     {
       "idiom" : "universal",
-      "scale" : "3x"
+      "scale" : "3x",
+      "filename" : "timeline_more_button_comment@3x.png"
     }
   ],
   "info" : {

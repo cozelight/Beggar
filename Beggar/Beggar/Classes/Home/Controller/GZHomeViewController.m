@@ -7,7 +7,7 @@
 //
 
 #import "GZHomeViewController.h"
-#import "GZMessageViewController.h"
+#import "GZDetialStatusController.h"
 #import "GZHttpTool.h"
 #import "GZUser.h"
 #import "GZPhoto.h"
@@ -17,7 +17,6 @@
 #import "GZAccountTool.h"
 #import "GZStatusCell.h"
 #import "GZStatusFrame.h"
-#import "XMGStatusBarHUD.h"
 #import "GZStatusTool.h"
 
 @interface GZHomeViewController ()
@@ -109,6 +108,7 @@
     }
     
     void (^dealingResult)(NSArray *) = ^(NSArray *statuses){
+
         // 将 "微博字典"数组 转为 "微博模型"数组
         NSArray *newStatuses = [GZStatus objectArrayWithKeyValuesArray:statuses];
         
@@ -227,7 +227,6 @@
         
         [self.tableView.footer endRefreshing];
         [self.tableView reloadData];
-
     };
     
     NSArray *statuses = [GZStatusTool statusesWithParams:params];
@@ -267,12 +266,15 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    GZDetialStatusController *detailStatus = [[GZDetialStatusController alloc] init];
+    GZStatusFrame *statusFrame = self.statusArray[indexPath.row];
     
-    GZMessageViewController *vc = [[GZMessageViewController alloc] init];
-    vc.title = [NSString stringWithFormat:@"测试消息---%zd",indexPath.row];
+    if (tableView != self.tableView) {
+        statusFrame = self.filteredStatuses[indexPath.row];
+    }
     
-    [self.navigationController pushViewController:vc animated:YES];
+    detailStatus.status = statusFrame.status;
+    [self.navigationController pushViewController:detailStatus animated:YES];
 }
 
 @end

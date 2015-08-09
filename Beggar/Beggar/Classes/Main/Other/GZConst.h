@@ -15,6 +15,17 @@ extern NSString * const kGZConsumerKey;
 extern NSString * const kGZConsumerSecret;
 extern NSString * const kGZCallBackUrl;
 
+
+// 通知
+// 头像被选中通知
+extern NSString * const GZIconDidSelectNotification;
+extern NSString * const GZSelectIconKey;
+
+// 消息中链接被点击通知
+extern NSString * const GZSpecialTextDidSelectNotification;
+extern NSString * const GZSelectSpecialTextKey;
+
+
 // API请求网站
 /** 返回好友或未设置隐私用户的信息 */
 extern NSString * const kGZUserShow;
@@ -24,3 +35,5 @@ extern NSString * const kGZHomeTimeLine;
 extern NSString * const kGZNotification;
 /** 按照时间先后顺序显示消息上下文 */
 extern NSString * const kGZContextTimeLine;
+/** 返回某条消息详细内容 */
+extern NSString * const kGZStatusShow;

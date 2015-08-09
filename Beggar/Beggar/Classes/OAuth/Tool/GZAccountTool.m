@@ -8,7 +8,7 @@
 
 #import "GZAccountTool.h"
 
-#define GZAccountPath [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:@"account.data"]
+#define GZAccountPath [[NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:@"account.data"]
 
 @implementation GZAccountTool
 
@@ -16,7 +16,6 @@
 {
     // 将返回的账号字典数据 --> 模型, 存进沙盒
     [NSKeyedArchiver archiveRootObject:account toFile:GZAccountPath];
-    
 }
 
 + (GZAccount *)account

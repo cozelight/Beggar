@@ -29,13 +29,17 @@
 {
     [super viewDidLoad];
     
-    // 5.添加搜索栏
+    self.tableView.backgroundColor = GZColor(240, 240, 240);
+    
+    // 1.添加搜索栏
     [self setupSearchBar];
     
-    // 6.获得未读数
-    //    NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:560 target:self selector:@selector(setupUnreadCount) userInfo:nil repeats:YES];
-    // 主线程也会抽时间处理一下timer（不管主线程是否正在其他事件）
-    //    [[NSRunLoop mainRunLoop] addTimer:timer forMode:NSRunLoopCommonModes];
+    // 监听头像被点击通知
+    [GZNotificationCenter addObserver:self selector:@selector(iconDidTap:) name:GZIconDidSelectNotification object:nil];
+    
+    // 监听特殊文字被点击通知
+    [GZNotificationCenter addObserver:self selector:@selector(speicalTextDidTap:) name:GZSpecialTextDidSelectNotification object:nil];
+    
 }
 
 - (NSMutableArray *)statusArray
@@ -56,6 +60,11 @@
         [statusFrames addObject:statusFrame];
     }
     return statusFrames;
+}
+
+- (void)dealloc
+{
+    [GZNotificationCenter removeObserver:self];
 }
 
 #pragma mark - 添加搜索栏
@@ -100,6 +109,23 @@
     }
     return YES;
 }
+
+#pragma mark - 通知相关
+
+- (void)iconDidTap:(NSNotification *)notification
+{
+    GZUser *user = notification.userInfo[GZSelectIconKey];
+    
+    GZLog(@"%@",user.name);
+}
+
+- (void)speicalTextDidTap:(NSNotification *)notification
+{
+    NSString *speicalText = notification.userInfo[GZSelectSpecialTextKey];
+    GZLog(@"%@",speicalText);
+}
+
+
 
 #pragma mark - TableView Delegate
 

@@ -20,7 +20,7 @@ NSInteger const GZBarButtonItemMargin = 5;
         if (![button isKindOfClass:[UIButton class]]) continue;
         
         if (button.centerX < self.width * 0.5) { // 左边的按钮
-            button.x = GZBarButtonItemMargin;
+            button.x = 3 * GZBarButtonItemMargin;
         } else if (button.centerX > self.width * 0.5) { // 右边的按钮
             button.x = self.width - button.width - GZBarButtonItemMargin;
         }

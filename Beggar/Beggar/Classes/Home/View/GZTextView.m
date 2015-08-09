@@ -92,6 +92,10 @@
         [self insertSubview:cover atIndex:0];
     }
     
+    // 设定通知
+    NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
+    userInfo[GZSelectSpecialTextKey] = special.text;
+    [GZNotificationCenter postNotificationName:GZSpecialTextDidSelectNotification object:nil userInfo:userInfo];
 }
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event

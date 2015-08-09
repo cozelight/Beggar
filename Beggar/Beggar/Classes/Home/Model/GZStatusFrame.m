@@ -67,7 +67,11 @@ NSInteger const kGZStatusPhotoWH = 80;
     // 来源
     CGFloat sourceX = nameX;
     CGFloat sourceY = CGRectGetMaxY(self.contentLabelF) + kGZStatusCellInsert;
-    CGSize sourceS = [status.source sizeWithFont:GZStatusCellSourceFont andMaxSize:CGSizeMake(contentMaxW, MAXFLOAT)];
+    NSString *sourceText = status.source;
+    if (status.in_reply_to_screen_name.length) {
+        sourceText = [NSString stringWithFormat:@"%@ 给%@的回复",status.source, status.in_reply_to_screen_name];
+    }
+    CGSize sourceS = [sourceText sizeWithFont:GZStatusCellSourceFont andMaxSize:CGSizeMake(contentMaxW, MAXFLOAT)];
     self.sourceLabelF = (CGRect){{sourceX,sourceY},sourceS};
     
     // cell高度
@@ -76,6 +80,9 @@ NSInteger const kGZStatusPhotoWH = 80;
     } else {
         self.cellHeight = CGRectGetMaxY(self.sourceLabelF) + kGZStatusCellInsert;
     }
+    
+    // 自己的frame
+    self.frame = CGRectMake(0, 0, GZScreenW, self.cellHeight);
     
 }
 

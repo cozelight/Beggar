@@ -23,11 +23,17 @@
 //    [bar setBackgroundImage:image forBarMetrics:UIBarMetricsDefault];
     [bar setBarTintColor:[UIColor colorWithPatternImage:image]];
     
-    
     NSMutableDictionary *titleAttrs = [NSMutableDictionary dictionary];
     titleAttrs[NSForegroundColorAttributeName] = [UIColor whiteColor];
-    titleAttrs[NSFontAttributeName] = [UIFont boldSystemFontOfSize:18];
+    titleAttrs[NSFontAttributeName] = [UIFont boldSystemFontOfSize:20];
     [bar setTitleTextAttributes:titleAttrs];
+    
+    UIBarButtonItem *btnItem = [UIBarButtonItem appearance];
+    
+    NSMutableDictionary *btnAttrs = [NSMutableDictionary dictionary];
+    btnAttrs[NSForegroundColorAttributeName] = [UIColor whiteColor];
+    btnAttrs[NSFontAttributeName] = [UIFont systemFontOfSize:16];
+    [btnItem setTitleTextAttributes:btnAttrs forState:UIControlStateNormal];
 }
 
 - (void)viewDidLoad {
@@ -48,11 +54,10 @@
         // 自动显示和隐藏tabbar
         viewController.hidesBottomBarWhenPushed = YES;
         
-        // 设置左边的返回按钮
-        viewController.navigationItem.leftBarButtonItem = [UIBarButtonItem itemAddTarget:self action:@selector(back) image:@"navigationbar_back" highlightImage:@"navigationbar_back_highlighted"];
+        viewController.navigationItem.leftBarButtonItem = [UIBarButtonItem itemAddTarget:self action:@selector(back) image:@"button_back" highlightImage:nil];
         
-        // 设置右边的更多按钮
-        viewController.navigationItem.rightBarButtonItem = [UIBarButtonItem itemAddTarget:self action:@selector(more) image:@"navigationbar_more" highlightImage:@"navigationbar_more_highlighted"];
+        viewController.navigationItem.rightBarButtonItem = [UIBarButtonItem itemAddTarget:self action:@selector(more) image:@"button_icon_group" highlightImage:nil];
+        
     }
     
     [super pushViewController:viewController animated:animated];
@@ -68,6 +73,5 @@
 {
     [self popToRootViewControllerAnimated:YES];
 }
-
 
 @end
