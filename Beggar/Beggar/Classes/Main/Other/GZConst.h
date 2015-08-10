@@ -37,3 +37,5 @@ extern NSString * const kGZNotification;
 extern NSString * const kGZContextTimeLine;
 /** 返回某条消息详细内容 */
 extern NSString * const kGZStatusShow;
+/** 显示回复/提到当前用户的20条消息 */
+extern NSString * const kGZStatusMentions;

@@ -12,12 +12,12 @@
 #import "GZUser.h"
 #import "GZPhoto.h"
 #import "GZStatus.h"
-#import "MJExtension.h"
 #import "MJRefresh.h"
 #import "GZAccountTool.h"
 #import "GZStatusCell.h"
 #import "GZStatusFrame.h"
 #import "GZStatusTool.h"
+#import "GZComposeController.h"
 
 @interface GZHomeViewController ()
 
@@ -65,7 +65,8 @@
 
 - (void)sendClick
 {
-    GZLog(@"sendClick");
+    GZComposeController *composeVc = [[GZComposeController alloc] init];
+    [self.navigationController pushViewController:composeVc animated:YES];
 }
 
 #pragma mark - 获取用户信息
@@ -73,7 +74,7 @@
 {
     [[GZHttpTool shareHttpTool] getWithURL:kGZUserShow params:nil success:^(id json) {
         
-        GZUser *user = [GZUser objectWithKeyValues:json];
+        GZUser *user = [MTLJSONAdapter modelOfClass:GZUser.class fromJSONDictionary:json error:nil];
         GZAccount *account = [GZAccountTool account];
         account.userName = user.name;
         account.userID = user.userID;
@@ -110,7 +111,7 @@
     void (^dealingResult)(NSArray *) = ^(NSArray *statuses){
 
         // 将 "微博字典"数组 转为 "微博模型"数组
-        NSArray *newStatuses = [GZStatus objectArrayWithKeyValuesArray:statuses];
+        NSArray *newStatuses = [MTLJSONAdapter modelsOfClass:GZStatus.class fromJSONArray:statuses error:nil];
         
         // 将 GZStatus数组 转为 GZStatusFrame数组
         NSArray *statusFrames = [self statusFramesWithStatuses:newStatuses];
@@ -125,8 +126,7 @@
         
         // 结束刷新
         [self.tableView.header endRefreshing];
-        
-        
+    
     };
     
     NSArray *statuses = [GZStatusTool statusesWithParams:params];
@@ -142,8 +142,8 @@
             dealingResult(json);
             
             // 显示最新微博的数量
-            NSArray *newStatuses = [GZStatus objectArrayWithKeyValuesArray:json];
-            [self showNewStatusCount:newStatuses.count];
+            NSArray *statusArray = (NSArray *)json;
+            [self showNewStatusCount:statusArray.count];
             
         } failure:^(NSError *error) {
             GZLog(@"%@",error);
@@ -220,7 +220,7 @@
     }
     
     void (^dealingResult)(NSArray *) = ^(NSArray *statuses){
-        NSArray *newStatuses = [GZStatus objectArrayWithKeyValuesArray:statuses];
+        NSArray *newStatuses = [MTLJSONAdapter modelsOfClass:GZStatus.class fromJSONArray:statuses error:nil];
         NSArray *statusFrames = [self statusFramesWithStatuses:newStatuses];
         
         [self.statusArray addObjectsFromArray:statusFrames];

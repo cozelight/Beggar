@@ -7,16 +7,30 @@
 //
 
 #import "GZUser.h"
-#import "MJExtension.h"
 
 @implementation GZUser
 
-+ (NSDictionary *)replacedKeyFromPropertyName
++ (NSDictionary *)JSONKeyPathsByPropertyKey
 {
     return @{
              @"userID" : @"id",
+             @"name" : @"name",
+             @"screen_name" : @"screen_name",
+             @"location" : @"location",
+             @"gender" : @"gender",
+             @"birthday" : @"birthday",
              @"selfDescription" : @"description",
-             @"isProtected" : @"protected"
+             @"profile_image_url" : @"profile_image_url",
+             @"profile_image_url_large" : @"profile_image_url_large",
+             @"url" : @"url",
+             @"isProtected" : @"protected",
+             @"followers_count" : @"followers_count",
+             @"friends_count" : @"friends_count",
+             @"favourites_count" : @"favourites_count",
+             @"statuses_count" : @"statuses_count",
+             @"following" : @"following",
+             @"notifications" : @"notifications",
+             @"created_at" : @"created_at"
              };
 }
 

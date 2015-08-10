@@ -57,6 +57,11 @@
 		E0A964FF1B74398100FBA5BC /* XMGStatusBarHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = E0A964FD1B74398100FBA5BC /* XMGStatusBarHUD.m */; };
 		E0A965271B7445B000FBA5BC /* GZStatusTool.m in Sources */ = {isa = PBXBuildFile; fileRef = E0A965261B7445B000FBA5BC /* GZStatusTool.m */; };
 		E0A9652C1B74E4C900FBA5BC /* GZSearchTableController.m in Sources */ = {isa = PBXBuildFile; fileRef = E0A9652B1B74E4C900FBA5BC /* GZSearchTableController.m */; };
+		E0BE4D321B78478C0055883E /* GZPersonalController.m in Sources */ = {isa = PBXBuildFile; fileRef = E0BE4D311B78478C0055883E /* GZPersonalController.m */; };
+		E0BE4D351B7848860055883E /* GZTopicViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E0BE4D341B7848860055883E /* GZTopicViewController.m */; };
+		E0BE4D381B7849860055883E /* GZWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E0BE4D371B7849860055883E /* GZWebViewController.m */; };
+		E0BE4D3B1B784E480055883E /* GZComposeController.m in Sources */ = {isa = PBXBuildFile; fileRef = E0BE4D3A1B784E480055883E /* GZComposeController.m */; };
+		E0BE4D3E1B7851470055883E /* GZMessageTool.m in Sources */ = {isa = PBXBuildFile; fileRef = E0BE4D3D1B7851470055883E /* GZMessageTool.m */; };
 		E0EFDD931B719C7C00508E8F /* AFOAuth1Client.m in Sources */ = {isa = PBXBuildFile; fileRef = E0EFDD921B719C7C00508E8F /* AFOAuth1Client.m */; };
 		E0EFDDA81B719C8800508E8F /* AFHTTPClient.m in Sources */ = {isa = PBXBuildFile; fileRef = E0EFDD961B719C8800508E8F /* AFHTTPClient.m */; };
 		E0EFDDA91B719C8800508E8F /* AFHTTPRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = E0EFDD981B719C8800508E8F /* AFHTTPRequestOperation.m */; };
@@ -184,6 +189,16 @@
 		E0A965261B7445B000FBA5BC /* GZStatusTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GZStatusTool.m; sourceTree = "<group>"; };
 		E0A9652A1B74E4C900FBA5BC /* GZSearchTableController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GZSearchTableController.h; sourceTree = "<group>"; };
 		E0A9652B1B74E4C900FBA5BC /* GZSearchTableController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GZSearchTableController.m; sourceTree = "<group>"; };
+		E0BE4D301B78478C0055883E /* GZPersonalController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GZPersonalController.h; sourceTree = "<group>"; };
+		E0BE4D311B78478C0055883E /* GZPersonalController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GZPersonalController.m; sourceTree = "<group>"; };
+		E0BE4D331B7848860055883E /* GZTopicViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GZTopicViewController.h; sourceTree = "<group>"; };
+		E0BE4D341B7848860055883E /* GZTopicViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GZTopicViewController.m; sourceTree = "<group>"; };
+		E0BE4D361B7849860055883E /* GZWebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GZWebViewController.h; sourceTree = "<group>"; };
+		E0BE4D371B7849860055883E /* GZWebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GZWebViewController.m; sourceTree = "<group>"; };
+		E0BE4D391B784E480055883E /* GZComposeController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GZComposeController.h; sourceTree = "<group>"; };
+		E0BE4D3A1B784E480055883E /* GZComposeController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GZComposeController.m; sourceTree = "<group>"; };
+		E0BE4D3C1B7851470055883E /* GZMessageTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GZMessageTool.h; sourceTree = "<group>"; };
+		E0BE4D3D1B7851470055883E /* GZMessageTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GZMessageTool.m; sourceTree = "<group>"; };
 		E0EFDD911B719C7C00508E8F /* AFOAuth1Client.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFOAuth1Client.h; sourceTree = "<group>"; };
 		E0EFDD921B719C7C00508E8F /* AFOAuth1Client.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFOAuth1Client.m; sourceTree = "<group>"; };
 		E0EFDD951B719C8800508E8F /* AFHTTPClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPClient.h; sourceTree = "<group>"; };
@@ -373,6 +388,7 @@
 		E09CB6F91B6EF5BF00D6769F /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				E0BE4D2B1B7844C30055883E /* Personal */,
 				E09CB6FA1B6EF5BF00D6769F /* Compose */,
 				E0A965321B74F66300FBA5BC /* DetailStatus */,
 				E09CB6FF1B6EF5BF00D6769F /* Discover */,
@@ -399,6 +415,8 @@
 		E09CB6FB1B6EF5BF00D6769F /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				E0BE4D391B784E480055883E /* GZComposeController.h */,
+				E0BE4D3A1B784E480055883E /* GZComposeController.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -440,6 +458,10 @@
 			children = (
 				E00C7B901B6F3C81007DA072 /* GZDiscoverViewController.h */,
 				E00C7B911B6F3C81007DA072 /* GZDiscoverViewController.m */,
+				E0BE4D331B7848860055883E /* GZTopicViewController.h */,
+				E0BE4D341B7848860055883E /* GZTopicViewController.m */,
+				E0BE4D361B7849860055883E /* GZWebViewController.h */,
+				E0BE4D371B7849860055883E /* GZWebViewController.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -637,6 +659,8 @@
 		E09CB7191B6EF5BF00D6769F /* Tool */ = {
 			isa = PBXGroup;
 			children = (
+				E0BE4D3C1B7851470055883E /* GZMessageTool.h */,
+				E0BE4D3D1B7851470055883E /* GZMessageTool.m */,
 			);
 			path = Tool;
 			sourceTree = "<group>";
@@ -787,6 +811,47 @@
 				E07BF4781B75A7A900E3EC80 /* GZDetailStatusCell.m */,
 				E07BF4981B77B33F00E3EC80 /* GZStatusToolbar.h */,
 				E07BF4991B77B33F00E3EC80 /* GZStatusToolbar.m */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		E0BE4D2B1B7844C30055883E /* Personal */ = {
+			isa = PBXGroup;
+			children = (
+				E0BE4D2C1B7844C30055883E /* Controller */,
+				E0BE4D2D1B7844C30055883E /* Model */,
+				E0BE4D2E1B7844C30055883E /* Tool */,
+				E0BE4D2F1B7844C30055883E /* View */,
+			);
+			path = Personal;
+			sourceTree = "<group>";
+		};
+		E0BE4D2C1B7844C30055883E /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				E0BE4D301B78478C0055883E /* GZPersonalController.h */,
+				E0BE4D311B78478C0055883E /* GZPersonalController.m */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		E0BE4D2D1B7844C30055883E /* Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		E0BE4D2E1B7844C30055883E /* Tool */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Tool;
+			sourceTree = "<group>";
+		};
+		E0BE4D2F1B7844C30055883E /* View */ = {
+			isa = PBXGroup;
+			children = (
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -973,6 +1038,7 @@
 				E07BF4921B77869E00E3EC80 /* MJPhotoToolbar.m in Sources */,
 				E0F81CF11B70C76100E773CB /* GZStatusFrame.m in Sources */,
 				E0EFDDAF1B719C8800508E8F /* AFXMLRequestOperation.m in Sources */,
+				E0BE4D3B1B784E480055883E /* GZComposeController.m in Sources */,
 				E07BF4931B77869E00E3EC80 /* MJPhotoView.m in Sources */,
 				E0EFDDB01B719C8800508E8F /* UIImageView+AFNetworking.m in Sources */,
 				E0EFDDAA1B719C8800508E8F /* AFImageRequestOperation.m in Sources */,
@@ -990,6 +1056,7 @@
 				E09CB7381B6EFC2700D6769F /* UIBarButtonItem+extension.m in Sources */,
 				E0F81CEB1B70C73700E773CB /* GZUser.m in Sources */,
 				E0A964E21B730B4100FBA5BC /* RegexKitLite.m in Sources */,
+				E0BE4D3E1B7851470055883E /* GZMessageTool.m in Sources */,
 				E07BF48D1B77869E00E3EC80 /* MJPhoto.m in Sources */,
 				E0F81CF41B70C77B00E773CB /* GZStatusCell.m in Sources */,
 				E0A964EA1B73862000FBA5BC /* GZTextPart.m in Sources */,
@@ -997,6 +1064,7 @@
 				E0F81CEE1B70C74500E773CB /* GZStatus.m in Sources */,
 				E09CB7371B6EFC2700D6769F /* NSString+Extension.m in Sources */,
 				E0A964D51B71DAB800FBA5BC /* GZPhoto.m in Sources */,
+				E0BE4D381B7849860055883E /* GZWebViewController.m in Sources */,
 				E09CB7361B6EFC2700D6769F /* NSDate+Extension.m in Sources */,
 				E0EFDDAB1B719C8800508E8F /* AFJSONRequestOperation.m in Sources */,
 				E00C7B921B6F3C81007DA072 /* GZDiscoverViewController.m in Sources */,
@@ -1016,6 +1084,8 @@
 				E00C7B661B6F1E68007DA072 /* GZLeftMenuButton.m in Sources */,
 				E0A964E71B73235500FBA5BC /* GZIconView.m in Sources */,
 				E00C7B981B6F3CAB007DA072 /* GZMessageViewController.m in Sources */,
+				E0BE4D321B78478C0055883E /* GZPersonalController.m in Sources */,
+				E0BE4D351B7848860055883E /* GZTopicViewController.m in Sources */,
 				E07BF4941B77869E00E3EC80 /* SDWebImageManager+MJ.m in Sources */,
 				E09CB7391B6EFC2700D6769F /* UITextView+Extension.m in Sources */,
 				E07BF48F1B77869E00E3EC80 /* MJPhotoBrowser.m in Sources */,

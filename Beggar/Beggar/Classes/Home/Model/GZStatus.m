@@ -9,17 +9,41 @@
 #import "GZStatus.h"
 #import "GZUser.h"
 #import "GZPhoto.h"
-#import "MJExtension.h"
 #import "RegexKitLite.h"
 #import "GZTextPart.h"
 #import "GZSpecial.h"
 
 @implementation GZStatus
 
-+ (NSDictionary *)replacedKeyFromPropertyName
++ (NSDictionary *)JSONKeyPathsByPropertyKey
 {
-    return @{@"msgID" : @"id"};
+    return @{
+             @"created_at" : @"created_at",
+             @"msgID" : @"id",
+             @"rawid" : @"rawid",
+             @"text" : @"text",
+             @"source" : @"source",
+             @"truncated" : @"truncated",
+             @"in_reply_to_status_id" : @"in_reply_to_status_id",
+             @"in_reply_to_user_id" : @"in_reply_to_user_id",
+             @"repost_status_id" : @"repost_status_id",
+             @"repost_status" : @"repost_status",
+             @"repost_user_id" : @"repost_user_id",
+             @"favorited" : @"favorited",
+             @"in_reply_to_screen_name" : @"in_reply_to_screen_name",
+             @"user" : @"user",
+             @"photo" : @"photo"
+             };
 }
+
++ (NSValueTransformer *)userJSONTransformer {
+    return [MTLJSONAdapter dictionaryTransformerWithModelClass:GZUser.class];
+}
+
++ (NSValueTransformer *)photoJSONTransformer {
+    return [MTLJSONAdapter dictionaryTransformerWithModelClass:GZPhoto.class];
+}
+
 
 #pragma mark - 重写时间get方法和来源set方法
 - (NSString *)created_at
@@ -81,8 +105,13 @@
 
 - (void)setSource:(NSString *)source
 {
+    
+    if (![source containsString:@">"] || ![source containsString:@"</"]) {
+        _source = @"通过「网页」";
+        return;
+    }
+    
     if (source.length) {
-        
         NSRange range;
         range.location = [source rangeOfString:@">"].location + 1;
         range.length = [source rangeOfString:@"</"].location - range.location;
@@ -114,7 +143,7 @@
     // 表情的规则
 //    NSString *emotionPattern = @"\\[[0-9a-zA-Z\\u4e00-\\u9fa5]+\\]";
     // @的规则
-    NSString *atPattern = @"@[0-9a-zA-Z\\u4e00-\\u9fa5-_]+";
+    NSString *atPattern = @"@[0-9a-zA-Z\\u4e00-\\u9fa5-_]+ ";
     // #话题#的规则
     NSString *topicPattern = @"#[0-9a-zA-Z\\u4e00-\\u9fa5]+#";
     // url链接的规则

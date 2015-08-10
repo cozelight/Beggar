@@ -25,7 +25,7 @@
     [self setupToolbarFrame];
     
     // 3.计算cell的高度
-    self.cellHeight = CGRectGetMaxY(self.toolbarFrame) + kGZStatusCellInsert;
+    self.cellHeight = CGRectGetMaxY(self.toolbarFrame) + 2 * kGZStatusCellInsert;
 }
 
 /**

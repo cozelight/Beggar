@@ -10,4 +10,12 @@
 
 @implementation GZPhoto
 
++ (NSDictionary *)JSONKeyPathsByPropertyKey
+{
+    return @{
+             @"imageurl" : @"imageurl",
+             @"thumburl" : @"thumburl",
+             @"largeurl" : @"largeurl"
+             };
+}
 @end

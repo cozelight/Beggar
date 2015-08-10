@@ -82,15 +82,15 @@
     GZSpecial *special = [self touchingSpecialWithPoint:point];
     
     // 在被触摸的特殊字符串后面显示一段高亮的背景
-    for (NSValue *rectValue in special.rects) {
-        // 在被触摸的特殊字符串后面显示一段高亮的背景
-        UIView *cover = [[UIView alloc] init];
-        cover.backgroundColor = GZColorRGBA(41, 96, 241, 0.5);
-        cover.frame = rectValue.CGRectValue;
-        cover.tag = GZStatusTextViewCoverTag;
-        cover.layer.cornerRadius = 2;
-        [self insertSubview:cover atIndex:0];
-    }
+//    for (NSValue *rectValue in special.rects) {
+//        // 在被触摸的特殊字符串后面显示一段高亮的背景
+//        UIView *cover = [[UIView alloc] init];
+//        cover.backgroundColor = GZColorRGBA(41, 96, 241, 0.5);
+//        cover.frame = rectValue.CGRectValue;
+//        cover.tag = GZStatusTextViewCoverTag;
+//        cover.layer.cornerRadius = 2;
+//        [self insertSubview:cover atIndex:0];
+//    }
     
     // 设定通知
     NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
@@ -100,17 +100,17 @@
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.25 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [self touchesCancelled:touches withEvent:event];
-    });
+//    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+//        [self touchesCancelled:touches withEvent:event];
+//    });
 }
 
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
 {
     // 去掉特殊字符串后面的高亮背景
-    for (UIView *child in self.subviews) {
-        if (child.tag == GZStatusTextViewCoverTag) [child removeFromSuperview];
-    }
+//    for (UIView *child in self.subviews) {
+//        if (child.tag == GZStatusTextViewCoverTag) [child removeFromSuperview];
+//    }
 }
 
 //- (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event

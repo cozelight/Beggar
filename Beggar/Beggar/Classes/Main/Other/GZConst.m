@@ -30,3 +30,4 @@ NSString * const kGZHomeTimeLine = @"http://api.fanfou.com/statuses/home_timelin
 NSString * const kGZNotification = @"http://api.fanfou.com/account/notification.json";
 NSString * const kGZContextTimeLine = @"http://api.fanfou.com/statuses/context_timeline.json";
 NSString * const kGZStatusShow = @"http://api.fanfou.com/statuses/show.json";
+NSString * const kGZStatusMentions = @"http://api.fanfou.com/statuses/mentions.json";

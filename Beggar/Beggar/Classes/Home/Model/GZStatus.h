@@ -7,10 +7,11 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "Mantle.h"
 
 @class GZUser, GZPhoto;
 
-@interface GZStatus : NSObject
+@interface GZStatus : MTLModel<MTLJSONSerializing>
 
 /**	string	消息发送时间 */
 @property (copy, nonatomic) NSString *created_at;
@@ -30,7 +31,10 @@
 /**	string	消息内容 -- 带有属性的(特殊文字会高亮显示)*/
 @property (nonatomic, copy, readonly) NSAttributedString *attributedText;
 
-/**	string	消息来源 */
+/**	string	原始消息来源 */
+@property (copy, nonatomic) NSString *originalSource;
+
+/**	string	过滤后消息来源 */
 @property (copy, nonatomic) NSString *source;
 
 /**	boolean	消息是否被截断 */

@@ -10,10 +10,13 @@
 #import "GZUser.h"
 #import "GZPhoto.h"
 #import "GZStatus.h"
-#import "MJExtension.h"
 #import "GZStatusCell.h"
 #import "GZStatusFrame.h"
 #import "GZStatusTool.h"
+#import "GZPersonalController.h"
+#import "GZTopicViewController.h"
+#import "GZWebViewController.h"
+
 
 @interface GZSearchTableController () <UISearchBarDelegate, UISearchDisplayDelegate>
 
@@ -102,7 +105,7 @@
         NSArray *resultStatus = [GZStatusTool searchStatusesWithText:searchString];
         
         // 将 "微博字典"数组 转为 "微博模型"数组
-        NSArray *newStatuses = [GZStatus objectArrayWithKeyValuesArray:resultStatus];
+        NSArray *newStatuses = [MTLJSONAdapter modelsOfClass:GZStatus.class fromJSONArray:resultStatus error:nil];
         
         // 将 GZStatus数组 转为 GZStatusFrame数组
         self.filteredStatuses = (NSMutableArray *)[self statusFramesWithStatuses:newStatuses];
@@ -117,12 +120,37 @@
     GZUser *user = notification.userInfo[GZSelectIconKey];
     
     GZLog(@"%@",user.name);
+    
+    GZPersonalController *msgVc = [[GZPersonalController alloc] init];
+    msgVc.title = user.name;
+    
+    
+    
+    [self.navigationController pushViewController:msgVc animated:YES];
+    
 }
 
 - (void)speicalTextDidTap:(NSNotification *)notification
 {
     NSString *speicalText = notification.userInfo[GZSelectSpecialTextKey];
-    GZLog(@"%@",speicalText);
+    
+    if ([speicalText hasPrefix:@"@"]) {
+        GZPersonalController *perVc = [[GZPersonalController alloc] init];
+        NSString *newText = [speicalText substringFromIndex:1];
+        perVc.title = newText;
+        [self.navigationController pushViewController:perVc animated:YES];
+    } else if ([speicalText hasPrefix:@"http"]) {
+        GZWebViewController *webVc = [[GZWebViewController alloc] init];
+        webVc.urlStr = speicalText;
+        [self.navigationController pushViewController:webVc animated:YES];
+    } else {
+        GZTopicViewController *topVc = [[GZTopicViewController alloc] init];
+        NSRange range = NSMakeRange(1, speicalText.length - 1);
+        NSString *newText = [speicalText substringWithRange:range];
+        topVc.title = newText;
+        [self.navigationController pushViewController:topVc animated:YES];
+    }
+    
 }
 
 

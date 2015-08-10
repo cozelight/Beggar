@@ -1,23 +1,23 @@
 //
-//  GZStatusTool.m
+//  GZMessageTool.m
 //  Beggar
 //
-//  Created by Madao on 15/8/7.
+//  Created by Madao on 15/8/10.
 //  Copyright (c) 2015年 GanZhen. All rights reserved.
 //
 
-#import "GZStatusTool.h"
+#import "GZMessageTool.h"
 #import "FMDB.h"
 #import "GZStatus.h"
 
-@implementation GZStatusTool
+@implementation GZMessageTool
 
 static FMDatabase *_db;
 
 + (void)initialize
 {
     // 1.打开数据库
-    NSString *path = [[NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:@"statuses.sqlite"];
+    NSString *path = [[NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:@"mentions.sqlite"];
     _db = [FMDatabase databaseWithPath:path];
     [_db open];
     

@@ -7,8 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "Mantle.h"
 
-@interface GZUser : NSObject
+@interface GZUser : MTLModel<MTLJSONSerializing>
 
 /** id string	用户id */
 @property (copy, nonatomic) NSString *userID;

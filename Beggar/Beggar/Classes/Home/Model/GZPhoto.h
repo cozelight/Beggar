@@ -7,8 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "Mantle.h"
 
-@interface GZPhoto : NSObject
+@interface GZPhoto : MTLModel<MTLJSONSerializing>
 
 /**	string	图片地址 */
 @property (copy, nonatomic) NSString *imageurl;

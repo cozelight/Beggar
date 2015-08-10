@@ -14,7 +14,6 @@
 #import "GZDetailStatusCell.h"
 #import "GZStatusCell.h"
 #import "GZHttpTool.h"
-#import "MJExtension.h"
 
 @interface GZDetialStatusController ()
 
@@ -54,7 +53,7 @@
         [[GZHttpTool shareHttpTool] getWithURL:kGZContextTimeLine params:params success:^(id json) {
             
             // 将 "微博字典"数组 转为 "微博模型"数组
-            NSArray *statuses = [GZStatus objectArrayWithKeyValuesArray:json];
+            NSArray *statuses = [MTLJSONAdapter modelsOfClass:GZStatus.class fromJSONArray:json error:nil];
             
             // 将 GZStatus数组 转为 GZDetailStatus数组
             self.statusArray = [self detailStatusesWithStatuses:statuses];
