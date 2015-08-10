@@ -7,6 +7,7 @@
 //
 
 #import "GZHomeViewController.h"
+#import "GZNavigationController.h"
 #import "GZDetialStatusController.h"
 #import "GZHttpTool.h"
 #import "GZUser.h"
@@ -66,7 +67,8 @@
 - (void)sendClick
 {
     GZComposeController *composeVc = [[GZComposeController alloc] init];
-    [self.navigationController pushViewController:composeVc animated:YES];
+    GZNavigationController *navVc = [[GZNavigationController alloc] initWithRootViewController:composeVc];
+    [self presentViewController:navVc animated:YES completion:nil];
 }
 
 #pragma mark - 获取用户信息

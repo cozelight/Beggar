@@ -418,7 +418,7 @@ static NSDictionary * AFKeychainQueryDictionaryWithIdentifier(NSString *identifi
     }
 }
 
-#pragma mark -
+#pragma mark - 重写GET/POST方法
 
 - (void)getWith:(NSString *)url params:(NSDictionary *)params success:(void(^)(id responseObject))success failure:(void (^)(NSError *error))failure
 {
@@ -426,6 +426,27 @@ static NSDictionary * AFKeychainQueryDictionaryWithIdentifier(NSString *identifi
     authorizationParams[@"oauth_token"] = self.accessToken.key;
     
     NSMutableURLRequest *request = [self getRequestWithPath:url params:params authorizationParams:authorizationParams];
+    
+    AFHTTPRequestOperation *operation = [self HTTPRequestOperationWithRequest:request success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        if (success) {
+            success(responseObject);
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        if (failure) {
+            failure(error);
+        }
+    }];
+    
+    [self enqueueHTTPRequestOperation:operation];
+    
+}
+
+- (void)postWith:(NSString *)url params:(NSDictionary *)params success:(void(^)(id responseObject))success failure:(void (^)(NSError *error))failure
+{
+    NSMutableDictionary *authorizationParams = [[self OAuthParameters] mutableCopy];
+    authorizationParams[@"oauth_token"] = self.accessToken.key;
+    
+    NSMutableURLRequest *request = [self postRequestWithPath:url params:params authorizationParams:authorizationParams];
     
     AFHTTPRequestOperation *operation = [self HTTPRequestOperationWithRequest:request success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if (success) {
@@ -453,6 +474,24 @@ static NSDictionary * AFKeychainQueryDictionaryWithIdentifier(NSString *identifi
     // See RFC 5849, Section 3.4.1.3.1 http://tools.ietf.org/html/rfc5849#section-3.4
     NSDictionary *authorizationParameters = authorizationParams;
     [request setValue:[self authorizationHeaderForMethod:@"GET" path:path parameters:authorizationParameters] forHTTPHeaderField:@"Authorization"];
+    [request setHTTPShouldHandleCookies:NO];
+    
+    return request;
+}
+
+#warning POST方法重写
+- (NSMutableURLRequest *)postRequestWithPath:(NSString *)path params:(NSDictionary *)params authorizationParams:(NSDictionary *)authorizationParams
+{
+    NSMutableURLRequest *request = [super requestWithMethod:@"POST" path:path parameters:params];
+    
+    // Only use parameters in the request entity body (with a content-type of `application/x-www-form-urlencoded`).
+    // See RFC 5849, Section 3.4.1.3.1 http://tools.ietf.org/html/rfc5849#section-3.4
+   
+    authorizationParams = ([[request valueForHTTPHeaderField:@"Content-Type"] hasPrefix:@"application/x-www-form-urlencoded"] ? authorizationParams : nil);
+    
+    path = [path stringByAppendingFormat:[path rangeOfString:@"?"].location == NSNotFound ? @"?%@" : @"&%@", AFQueryStringFromParametersWithEncoding(params, super.stringEncoding)];
+    
+    [request setValue:[self authorizationHeaderForMethod:@"POST" path:path parameters:authorizationParams] forHTTPHeaderField:@"Authorization"];
     [request setHTTPShouldHandleCookies:NO];
     
     return request;

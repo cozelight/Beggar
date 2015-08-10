@@ -22,4 +22,6 @@ typedef void (^HttpRequestFailure)(NSError *error);
 
 - (void)getWithURL:(NSString *)url params:(NSDictionary *)params success:(HttpRequestSuccess)success failure:(HttpRequestFailure)failure;
 
+- (void)postWithURL:(NSString *)url params:(NSDictionary *)params success:(HttpRequestSuccess)success failure:(HttpRequestFailure)failure;
+
 @end

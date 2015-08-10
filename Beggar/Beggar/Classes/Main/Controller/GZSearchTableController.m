@@ -124,8 +124,6 @@
     GZPersonalController *msgVc = [[GZPersonalController alloc] init];
     msgVc.title = user.name;
     
-    
-    
     [self.navigationController pushViewController:msgVc animated:YES];
     
 }

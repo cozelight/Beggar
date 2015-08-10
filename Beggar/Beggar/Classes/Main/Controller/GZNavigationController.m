@@ -28,12 +28,20 @@
     titleAttrs[NSFontAttributeName] = [UIFont boldSystemFontOfSize:20];
     [bar setTitleTextAttributes:titleAttrs];
     
+    // 设置整个项目所有item的主题样式
     UIBarButtonItem *btnItem = [UIBarButtonItem appearance];
     
+    // 设置普通状态
     NSMutableDictionary *btnAttrs = [NSMutableDictionary dictionary];
     btnAttrs[NSForegroundColorAttributeName] = [UIColor whiteColor];
     btnAttrs[NSFontAttributeName] = [UIFont systemFontOfSize:16];
     [btnItem setTitleTextAttributes:btnAttrs forState:UIControlStateNormal];
+    
+    // 设置不可用状态
+    NSMutableDictionary *disableTextAttrs = [NSMutableDictionary dictionary];
+    disableTextAttrs[NSForegroundColorAttributeName] = [UIColor darkGrayColor];
+    disableTextAttrs[NSFontAttributeName] = btnAttrs[NSFontAttributeName];
+    [btnItem setTitleTextAttributes:disableTextAttrs forState:UIControlStateDisabled];
 }
 
 - (void)viewDidLoad {
