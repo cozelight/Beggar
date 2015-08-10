@@ -147,6 +147,9 @@ typedef NS_ENUM(NSUInteger, AFOAuthSignatureMethod) {
 
 - (void)postWith:(NSString *)url params:(NSDictionary *)params success:(void(^)(id responseObject))success failure:(void (^)(NSError *error))failure;
 
+- (void)postWith:(NSString *)url params:(NSDictionary *)params constructingBodyWithBlock:(void(^)(id<AFMultipartFormData> formData))block success:(void(^)(id responseObject))success failure:(void (^)(NSError *error))failure;
+
+
 @end
 
 ///----------------

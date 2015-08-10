@@ -462,6 +462,32 @@ static NSDictionary * AFKeychainQueryDictionaryWithIdentifier(NSString *identifi
     
 }
 
+#warning POST带文件上传功能
+- (void)postWith:(NSString *)url params:(NSDictionary *)params constructingBodyWithBlock:(void (^)(id<AFMultipartFormData>))block success:(void (^)(id))success failure:(void (^)(NSError *))failure
+{
+    NSMutableDictionary *authorizationParams = [[self OAuthParameters] mutableCopy];
+    authorizationParams[@"oauth_token"] = self.accessToken.key;
+    
+    NSMutableURLRequest *request = [self multipartFormRequestWithPath:url params:params authorizationParams:authorizationParams constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
+        if (block) {
+            block(formData);
+        }
+    }];
+    
+    AFHTTPRequestOperation *operation = [self HTTPRequestOperationWithRequest:request success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        if (success) {
+            success(responseObject);
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        if (failure) {
+            failure(error);
+        }
+    }];
+    
+    [self enqueueHTTPRequestOperation:operation];
+    
+}
+
 - (NSMutableURLRequest *)getRequestWithPath:(NSString *)path params:(NSDictionary *)params authorizationParams:(NSDictionary *)authorizationParams
 {
     if (params) {
@@ -479,7 +505,6 @@ static NSDictionary * AFKeychainQueryDictionaryWithIdentifier(NSString *identifi
     return request;
 }
 
-#warning POST方法重写
 - (NSMutableURLRequest *)postRequestWithPath:(NSString *)path params:(NSDictionary *)params authorizationParams:(NSDictionary *)authorizationParams
 {
     NSMutableURLRequest *request = [super requestWithMethod:@"POST" path:path parameters:params];
@@ -494,6 +519,23 @@ static NSDictionary * AFKeychainQueryDictionaryWithIdentifier(NSString *identifi
     [request setValue:[self authorizationHeaderForMethod:@"POST" path:path parameters:authorizationParams] forHTTPHeaderField:@"Authorization"];
     [request setHTTPShouldHandleCookies:NO];
     
+    return request;
+}
+
+- (NSMutableURLRequest *)multipartFormRequestWithPath:(NSString *)path
+                                               params:(NSDictionary *)params
+                                  authorizationParams:(NSDictionary *)authorizationParams
+                            constructingBodyWithBlock:(void (^)(id <AFMultipartFormData> formData))block
+{
+    NSMutableURLRequest *request = [super multipartFormRequestWithMethod:@"POST" path:path parameters:params constructingBodyWithBlock:block];
+    
+    // Only use parameters in the HTTP POST request body (with a content-type of `application/x-www-form-urlencoded`).
+    // See RFC 5849, Section 3.4.1.3.1 http://tools.ietf.org/html/rfc5849#section-3.4
+    authorizationParams = ([[request valueForHTTPHeaderField:@"Content-Type"] hasPrefix:@"application/x-www-form-urlencoded"] ? authorizationParams : nil);
+    
+    [request setValue:[self authorizationHeaderForMethod:@"POST" path:path parameters:authorizationParams] forHTTPHeaderField:@"Authorization"];
+    [request setHTTPShouldHandleCookies:NO];
+
     return request;
 }
 
@@ -525,22 +567,6 @@ static NSDictionary * AFKeychainQueryDictionaryWithIdentifier(NSString *identifi
         authorizationParameters = ([[request valueForHTTPHeaderField:@"Content-Type"] hasPrefix:@"application/x-www-form-urlencoded"] ? parameters : nil);
     }
     
-    [request setValue:[self authorizationHeaderForMethod:method path:path parameters:authorizationParameters] forHTTPHeaderField:@"Authorization"];
-    [request setHTTPShouldHandleCookies:NO];
-    
-    return request;
-}
-
-- (NSMutableURLRequest *)multipartFormRequestWithMethod:(NSString *)method
-                                                   path:(NSString *)path
-                                             parameters:(NSDictionary *)parameters
-                              constructingBodyWithBlock:(void (^)(id <AFMultipartFormData> formData))block
-{
-    NSMutableURLRequest *request = [super multipartFormRequestWithMethod:method path:path parameters:parameters constructingBodyWithBlock:block];
-
-    // Only use parameters in the HTTP POST request body (with a content-type of `application/x-www-form-urlencoded`).
-    // See RFC 5849, Section 3.4.1.3.1 http://tools.ietf.org/html/rfc5849#section-3.4
-    NSDictionary *authorizationParameters = ([[request valueForHTTPHeaderField:@"Content-Type"] hasPrefix:@"application/x-www-form-urlencoded"] ? parameters : nil);
     [request setValue:[self authorizationHeaderForMethod:method path:path parameters:authorizationParameters] forHTTPHeaderField:@"Authorization"];
     [request setHTTPShouldHandleCookies:NO];
     

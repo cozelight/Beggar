@@ -24,4 +24,6 @@ typedef void (^HttpRequestFailure)(NSError *error);
 
 - (void)postWithURL:(NSString *)url params:(NSDictionary *)params success:(HttpRequestSuccess)success failure:(HttpRequestFailure)failure;
 
+- (void)postWithURL:(NSString *)url params:(NSDictionary *)params constructingBodyWithBlock:(void(^)(id<AFMultipartFormData> formData))block success:(HttpRequestSuccess)success failure:(HttpRequestFailure)failure;
+
 @end

@@ -32,3 +32,4 @@ NSString * const kGZContextTimeLine = @"http://api.fanfou.com/statuses/context_t
 NSString * const kGZStatusShow = @"http://api.fanfou.com/statuses/show.json";
 NSString * const kGZStatusMentions = @"http://api.fanfou.com/statuses/mentions.json";
 NSString * const kGZStatusUpdate = @"http://api.fanfou.com/statuses/update.json";
+NSString * const kGZPhotoUpdate = @"http://api.fanfou.com/photos/upload.json";

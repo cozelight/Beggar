@@ -72,6 +72,13 @@
     [self setNeedsDisplay];
 }
 
+- (void)setFrame:(CGRect)frame
+{
+    [super setFrame:frame];
+    
+    [self setNeedsDisplay];
+}
+
 - (void)drawRect:(CGRect)rect
 {
     // 如果有输入文字，就直接返回，不画占位文字

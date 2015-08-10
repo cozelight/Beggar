@@ -131,11 +131,34 @@ static id _instance;
         }
     } failure:^(NSError *error) {
         if (failure) {
+            failure(error);
+        }
+    }];
+}
+
+- (void)postWithURL:(NSString *)url params:(NSDictionary *)params constructingBodyWithBlock:(void (^)(id<AFMultipartFormData>))block success:(HttpRequestSuccess)success failure:(HttpRequestFailure)failure
+{
+    GZAccount *account = [GZAccountTool account];
+    AFOAuth1Token *accessToken = [[AFOAuth1Token alloc] initWithKey:account.key secret:account.secret session:account.session expiration:nil renewable:NO];
+    
+    self.OAuthClient.accessToken = accessToken;
+    [self.OAuthClient postWith:url params:params constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
+        if (block) {
+            block(formData);
+        }
+    } success:^(id responseObject) {
+        id json = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:nil];
+        
+        if (success) {
+            success(json);
+        }
+    } failure:^(NSError *error) {
+        if (failure) {
             GZLog(@"%@",error);
             failure(error);
         }
     }];
-
+    
 }
 
 @end

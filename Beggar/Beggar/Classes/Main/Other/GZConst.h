@@ -41,3 +41,5 @@ extern NSString * const kGZStatusShow;
 extern NSString * const kGZStatusMentions;
 /** 发送消息 */
 extern NSString * const kGZStatusUpdate;
+/** 发送图片 */
+extern NSString * const kGZPhotoUpdate;
