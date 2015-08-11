@@ -13,10 +13,6 @@
 #import "GZStatusCell.h"
 #import "GZStatusFrame.h"
 #import "GZStatusTool.h"
-#import "GZPersonalController.h"
-#import "GZTopicViewController.h"
-#import "GZWebViewController.h"
-
 
 @interface GZSearchTableController () <UISearchBarDelegate, UISearchDisplayDelegate>
 
@@ -36,12 +32,6 @@
     
     // 1.添加搜索栏
     [self setupSearchBar];
-    
-    // 监听头像被点击通知
-    [GZNotificationCenter addObserver:self selector:@selector(iconDidTap:) name:GZIconDidSelectNotification object:nil];
-    
-    // 监听特殊文字被点击通知
-    [GZNotificationCenter addObserver:self selector:@selector(speicalTextDidTap:) name:GZSpecialTextDidSelectNotification object:nil];
     
 }
 
@@ -112,46 +102,6 @@
     }
     return YES;
 }
-
-#pragma mark - 通知相关
-
-- (void)iconDidTap:(NSNotification *)notification
-{
-    GZUser *user = notification.userInfo[GZSelectIconKey];
-    
-    GZLog(@"%@",user.name);
-    
-    GZPersonalController *msgVc = [[GZPersonalController alloc] init];
-    msgVc.title = user.name;
-    
-    [self.navigationController pushViewController:msgVc animated:YES];
-    
-}
-
-- (void)speicalTextDidTap:(NSNotification *)notification
-{
-    NSString *speicalText = notification.userInfo[GZSelectSpecialTextKey];
-    
-    if ([speicalText hasPrefix:@"@"]) {
-        GZPersonalController *perVc = [[GZPersonalController alloc] init];
-        NSString *newText = [speicalText substringFromIndex:1];
-        perVc.title = newText;
-        [self.navigationController pushViewController:perVc animated:YES];
-    } else if ([speicalText hasPrefix:@"http"]) {
-        GZWebViewController *webVc = [[GZWebViewController alloc] init];
-        webVc.urlStr = speicalText;
-        [self.navigationController pushViewController:webVc animated:YES];
-    } else {
-        GZTopicViewController *topVc = [[GZTopicViewController alloc] init];
-        NSRange range = NSMakeRange(1, speicalText.length - 1);
-        NSString *newText = [speicalText substringWithRange:range];
-        topVc.title = newText;
-        [self.navigationController pushViewController:topVc animated:YES];
-    }
-    
-}
-
-
 
 #pragma mark - TableView Delegate
 

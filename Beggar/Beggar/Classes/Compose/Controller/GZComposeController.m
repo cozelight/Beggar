@@ -196,6 +196,7 @@ NSInteger const kComposeMargin = 10;
     if (![UIImagePickerController isSourceTypeAvailable:type]) return;
     
     UIImagePickerController *ipc = [[UIImagePickerController alloc] init];
+    [ipc.navigationBar setBarTintColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"timeline_nav_bg"]]];
     ipc.sourceType = type;
     ipc.delegate = self;
     [self presentViewController:ipc animated:YES completion:nil];

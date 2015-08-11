@@ -9,7 +9,7 @@
 #import "GZNavigationController.h"
 #import "GZNavigationBar.h"
 
-@interface GZNavigationController ()
+@interface GZNavigationController () <UIGestureRecognizerDelegate, UINavigationControllerDelegate>
 
 @end
 
@@ -18,10 +18,6 @@
 + (void)initialize
 {
     UINavigationBar *bar = [UINavigationBar appearance];
-    
-    UIImage *image = [UIImage imageNamed:@"timeline_nav_bg"];
-//    [bar setBackgroundImage:image forBarMetrics:UIBarMetricsDefault];
-    [bar setBarTintColor:[UIColor colorWithPatternImage:image]];
     
     NSMutableDictionary *titleAttrs = [NSMutableDictionary dictionary];
     titleAttrs[NSForegroundColorAttributeName] = [UIColor whiteColor];
@@ -49,6 +45,21 @@
     
     // 替换自定义导航栏
     [self setValue:[[GZNavigationBar alloc] init] forKeyPath:@"navigationBar"];
+    
+    //是否开启右滑返回
+    __weak typeof(self) weakSelf = self;
+    if ([self respondsToSelector:@selector(interactivePopGestureRecognizer)]) {
+        self.interactivePopGestureRecognizer.delegate = weakSelf;
+        self.delegate = weakSelf;
+    }
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    [self.navigationBar setBarTintColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"timeline_nav_bg"]]];
+    
 }
 
 /**
@@ -61,14 +72,24 @@
     if (self.viewControllers.count > 0) {
         // 自动显示和隐藏tabbar
         viewController.hidesBottomBarWhenPushed = YES;
-        
         viewController.navigationItem.leftBarButtonItem = [UIBarButtonItem itemAddTarget:self action:@selector(back) image:@"button_back" highlightImage:nil];
         
         viewController.navigationItem.rightBarButtonItem = [UIBarButtonItem itemAddTarget:self action:@selector(more) image:@"button_icon_group" highlightImage:nil];
         
     }
+    if ([self respondsToSelector:@selector(interactivePopGestureRecognizer)]) {
+        self.interactivePopGestureRecognizer.enabled = NO;
+    }
     
     [super pushViewController:viewController animated:animated];
+
+}
+
+- (void)navigationController:(UINavigationController *)navigationController didShowViewController:(UIViewController *)viewController animated:(BOOL)animated
+{
+    if ([self respondsToSelector:@selector(interactivePopGestureRecognizer)]) {
+        self.interactivePopGestureRecognizer.enabled = YES;
+    }
 }
 
 - (void)back

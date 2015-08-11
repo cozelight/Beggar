@@ -19,4 +19,10 @@
 @property (assign, nonatomic) CGSize size;
 @property (assign, nonatomic) CGPoint origin;
 
+
+/**
+ *  获取当前屏幕显示的viewcontroller
+ */
+- (UIViewController *)getCurrentVC;
+
 @end

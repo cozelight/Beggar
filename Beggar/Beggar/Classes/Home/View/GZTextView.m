@@ -8,6 +8,9 @@
 
 #import "GZTextView.h"
 #import "GZSpecial.h"
+#import "GZPersonalController.h"
+#import "GZTopicViewController.h"
+#import "GZWebViewController.h"
 
 #define GZStatusTextViewCoverTag 999
 
@@ -92,10 +95,9 @@
 //        [self insertSubview:cover atIndex:0];
 //    }
     
-    // 设定通知
-    NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
-    userInfo[GZSelectSpecialTextKey] = special.text;
-    [GZNotificationCenter postNotificationName:GZSpecialTextDidSelectNotification object:nil userInfo:userInfo];
+    // 处理点击
+    [self speicalTextDidTap:special.text];
+    
 }
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
@@ -140,5 +142,30 @@
 // 1.判断触摸点在谁身上: 调用所有UI控件的- (BOOL)pointInside:(CGPoint)point withEvent:(UIEvent *)event
 // 2.pointInside返回YES的控件就是触摸点所在的UI控件
 // 3.由触摸点所在的UI控件选出处理事件的UI控件: 调用- (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
+
+// 处理点击事件
+- (void)speicalTextDidTap:(NSString *)text
+{
+    UINavigationController *currentNav = self.getCurrentVC.navigationController;
+    
+    if ([text hasPrefix:@"@"]) {
+        GZPersonalController *perVc = [[GZPersonalController alloc] init];
+        NSString *newText = [text substringFromIndex:1];
+        perVc.title = newText;
+        [currentNav pushViewController:perVc animated:YES];
+    } else if ([text hasPrefix:@"http"]) {
+        GZWebViewController *webVc = [[GZWebViewController alloc] init];
+        webVc.urlStr = text;
+        [currentNav pushViewController:webVc animated:YES];
+    } else {
+        GZTopicViewController *topVc = [[GZTopicViewController alloc] init];
+        NSRange range = NSMakeRange(1, text.length - 1);
+        NSString *newText = [text substringWithRange:range];
+        topVc.title = newText;
+        [currentNav pushViewController:topVc animated:YES];
+    }
+    
+}
+
 
 @end

@@ -9,6 +9,7 @@
 #import "GZIconView.h"
 #import "GZUser.h"
 #import "UIImageView+WebCache.h"
+#import "GZPersonalController.h"
 
 @implementation GZIconView
 
@@ -29,10 +30,11 @@
 
 - (void)tapIcon:(UITapGestureRecognizer *)recognizer
 {
-    // 设定通知
-    NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
-    userInfo[GZSelectIconKey] = self.user;
-    [GZNotificationCenter postNotificationName:GZIconDidSelectNotification object:nil userInfo:userInfo];
+    // 处理点击
+    GZPersonalController *msgVc = [[GZPersonalController alloc] init];
+    msgVc.title = self.user.name;
+    
+    [self.getCurrentVC.navigationController pushViewController:msgVc animated:YES];
     
 }
 
