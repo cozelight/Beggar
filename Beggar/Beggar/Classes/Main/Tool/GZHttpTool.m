@@ -24,25 +24,31 @@ static id _instance;
 
 #pragma mark - 初始化单例
 
-+ (instancetype)allocWithZone:(struct _NSZone *)zone
-{
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        _instance = [super allocWithZone:zone];
-    });
-    return _instance;
-}
-
 + (instancetype)shareHttpTool
 {
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        _instance = [[self alloc] init];
-    });
-    return _instance;
+    @synchronized(self) {
+        if (_instance == nil) {
+            _instance = [[GZHttpTool alloc] init];
+        }
+        return _instance;
+    }
+}
+
++ (void)releaseInstance {
+    @synchronized(self) {
+        if (_instance != nil) {
+            [_instance releaseOAuthClient];
+            _instance = nil;
+        }
+    }
 }
 
 #pragma mark - OAuth
+
+- (void)releaseOAuthClient {
+    self.OAuthClient = nil;
+    self.requestToken = nil;
+}
 
 - (AFOAuth1Client *)OAuthClient
 {

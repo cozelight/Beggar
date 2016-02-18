@@ -12,6 +12,8 @@
 
 @interface GZOAuthViewController () <UIWebViewDelegate>
 
+@property (strong, nonatomic) UIWebView *webView;
+
 @end
 
 @implementation GZOAuthViewController
@@ -20,10 +22,15 @@
 {
     [super viewDidLoad];
     
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"取消" style:UIBarButtonItemStyleDone target:self action:@selector(cancelBtnAction)];
+    
+    self.navigationItem.rightBarButtonItem = nil;
+    
     // 1.创建一个webView
-    UIWebView *webView = [[UIWebView alloc] initWithFrame:self.view.bounds];
+    UIWebView *webView = [[UIWebView alloc] init];
     webView.delegate = self;
-    self.view = webView;
+    [self.view addSubview:webView];
+    self.webView = webView;
     
 //     2.用webView加载登陆页面
     [[GZHttpTool shareHttpTool] acquireOAuthRequestTokenWithSuccess:^(NSURL *reqUrl) {
@@ -34,9 +41,17 @@
     } failure:^(NSError *error) {
         GZLog(@"%@",error);
     }];
-    
-    
 }
+
+- (void)viewWillLayoutSubviews {
+    [super viewWillLayoutSubviews];
+    self.webView.frame = self.view.bounds;
+}
+
+- (void)cancelBtnAction {
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
 
 // accessToken.key
 // 574927-8f21c93a337d7753578e2f097f6052b3

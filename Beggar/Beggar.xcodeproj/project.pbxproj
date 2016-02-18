@@ -44,6 +44,9 @@
 		E09CB7391B6EFC2700D6769F /* UITextView+Extension.m in Sources */ = {isa = PBXBuildFile; fileRef = E09CB7301B6EFC2700D6769F /* UITextView+Extension.m */; };
 		E09CB73A1B6EFC2700D6769F /* UIView+extension.m in Sources */ = {isa = PBXBuildFile; fileRef = E09CB7321B6EFC2700D6769F /* UIView+extension.m */; };
 		E09CB73B1B6EFC2700D6769F /* UIWindow+Extension.m in Sources */ = {isa = PBXBuildFile; fileRef = E09CB7341B6EFC2700D6769F /* UIWindow+Extension.m */; };
+		E09F19811C75554F003A386E /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E09F19801C75554F003A386E /* Launch Screen.storyboard */; };
+		E09F19881C755C0C003A386E /* GZLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E09F19861C755C0C003A386E /* GZLoginViewController.m */; };
+		E09F19891C755C0C003A386E /* GZLoginViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E09F19871C755C0C003A386E /* GZLoginViewController.xib */; };
 		E0A964D51B71DAB800FBA5BC /* GZPhoto.m in Sources */ = {isa = PBXBuildFile; fileRef = E0A964D41B71DAB800FBA5BC /* GZPhoto.m */; };
 		E0A964D81B72049600FBA5BC /* GZNavigationBar.m in Sources */ = {isa = PBXBuildFile; fileRef = E0A964D71B72049600FBA5BC /* GZNavigationBar.m */; };
 		E0A964DB1B72669900FBA5BC /* GZConst.m in Sources */ = {isa = PBXBuildFile; fileRef = E0A964DA1B72669900FBA5BC /* GZConst.m */; };
@@ -166,6 +169,10 @@
 		E09CB7331B6EFC2700D6769F /* UIWindow+Extension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIWindow+Extension.h"; sourceTree = "<group>"; };
 		E09CB7341B6EFC2700D6769F /* UIWindow+Extension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIWindow+Extension.m"; sourceTree = "<group>"; };
 		E09CB73C1B6EFC6500D6769F /* PrefixHeader.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PrefixHeader.pch; sourceTree = "<group>"; };
+		E09F19801C75554F003A386E /* Launch Screen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
+		E09F19851C755C0C003A386E /* GZLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GZLoginViewController.h; sourceTree = "<group>"; };
+		E09F19861C755C0C003A386E /* GZLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GZLoginViewController.m; sourceTree = "<group>"; };
+		E09F19871C755C0C003A386E /* GZLoginViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = GZLoginViewController.xib; sourceTree = "<group>"; };
 		E0A964D31B71DAB800FBA5BC /* GZPhoto.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GZPhoto.h; sourceTree = "<group>"; };
 		E0A964D41B71DAB800FBA5BC /* GZPhoto.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GZPhoto.m; sourceTree = "<group>"; };
 		E0A964D61B72049600FBA5BC /* GZNavigationBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GZNavigationBar.h; sourceTree = "<group>"; };
@@ -608,6 +615,7 @@
 				E0A964D91B72669900FBA5BC /* GZConst.h */,
 				E0A964DA1B72669900FBA5BC /* GZConst.m */,
 				E09CB7131B6EF5BF00D6769F /* main.m */,
+				E09F19801C75554F003A386E /* Launch Screen.storyboard */,
 			);
 			path = Other;
 			sourceTree = "<group>";
@@ -693,6 +701,9 @@
 			children = (
 				E00C7BE71B6F6429007DA072 /* GZOAuthViewController.h */,
 				E00C7BE81B6F6429007DA072 /* GZOAuthViewController.m */,
+				E09F19851C755C0C003A386E /* GZLoginViewController.h */,
+				E09F19861C755C0C003A386E /* GZLoginViewController.m */,
+				E09F19871C755C0C003A386E /* GZLoginViewController.xib */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -948,6 +959,7 @@
 				TargetAttributes = {
 					E04938881B61FF5B0039F3F6 = {
 						CreatedOnToolsVersion = 6.4;
+						DevelopmentTeam = A2TQGF3D2B;
 					};
 					E04938A11B61FF5B0039F3F6 = {
 						CreatedOnToolsVersion = 6.4;
@@ -981,7 +993,9 @@
 			files = (
 				E07BF48E1B77869E00E3EC80 /* MJPhotoBrowser.bundle in Resources */,
 				E0A964FE1B74398100FBA5BC /* XMGStatusBarHUD.bundle in Resources */,
+				E09F19811C75554F003A386E /* Launch Screen.storyboard in Resources */,
 				E049389A1B61FF5B0039F3F6 /* Images.xcassets in Resources */,
+				E09F19891C755C0C003A386E /* GZLoginViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1047,6 +1061,7 @@
 				E0BE4D3B1B784E480055883E /* GZComposeController.m in Sources */,
 				E07BF4931B77869E00E3EC80 /* MJPhotoView.m in Sources */,
 				E0EFDDB01B719C8800508E8F /* UIImageView+AFNetworking.m in Sources */,
+				E09F19881C755C0C003A386E /* GZLoginViewController.m in Sources */,
 				E0EFDDAA1B719C8800508E8F /* AFImageRequestOperation.m in Sources */,
 				E09CB73B1B6EFC2700D6769F /* UIWindow+Extension.m in Sources */,
 				E0EFDDAD1B719C8800508E8F /* AFPropertyListRequestOperation.m in Sources */,
@@ -1209,13 +1224,14 @@
 			baseConfigurationReference = E7AD9F3794E85D83BCCAA21F /* Pods.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Wei Feng Hou (RGR96FVT75)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Wei Feng Hou (RGR96FVT75)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Xiaojun Liu (79R64RPJ33)";
 				INFOPLIST_FILE = Beggar/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "63cdc7ad-f579-4e15-901a-3e4f6b43cb17";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -1224,13 +1240,14 @@
 			baseConfigurationReference = 8B29FED52900203E80E63253 /* Pods.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = Beggar/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "63cdc7ad-f579-4e15-901a-3e4f6b43cb17";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};

@@ -22,4 +22,6 @@
  */
 - (NSInteger)fileSize;
 
+- (NSString *)md5;
+
 @end

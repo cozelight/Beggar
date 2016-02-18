@@ -19,8 +19,9 @@
 #import "GZStatusFrame.h"
 #import "GZStatusTool.h"
 #import "GZComposeController.h"
+#import "GZLoginViewController.h"
 
-@interface GZHomeViewController ()
+@interface GZHomeViewController () <UIAlertViewDelegate>
 
 @end
 
@@ -55,6 +56,8 @@
 #pragma makr - 设置导航栏
 - (void)setupNav
 {
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"注销" style:UIBarButtonItemStyleDone target:self action:@selector(logout)];
+    
     // 设置右上角发送按钮
     self.navigationItem.rightBarButtonItem = [UIBarButtonItem itemAddTarget:self action:@selector(sendClick) image:@"mask_timeline_top_icon" highlightImage:nil];
 
@@ -69,6 +72,34 @@
     GZComposeController *composeVc = [[GZComposeController alloc] init];
     GZNavigationController *navVc = [[GZNavigationController alloc] initWithRootViewController:composeVc];
     [self presentViewController:navVc animated:YES completion:nil];
+}
+
+#pragma mark - Logout Action
+
+- (void)logout {
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"确定要注销？" message:nil delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+    [alert show];
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    if (buttonIndex == 1) {
+        [GZStatusTool releaseInstance];
+        [GZHttpTool releaseInstance];
+        [GZAccountTool logoutAccount];
+        GZLoginViewController *loginVC = [[GZLoginViewController alloc] init];
+        
+        UIWindow *window = nil;
+        if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 9.0f){
+            window = [[[UIApplication sharedApplication] delegate] window];
+        } else {
+            window = [UIApplication sharedApplication].keyWindow;
+            if (!window) {
+                window = [[[UIApplication sharedApplication] delegate] window];
+            }
+        }
+        
+        window.rootViewController = [[GZNavigationController alloc] initWithRootViewController:loginVC];
+    }
 }
 
 #pragma mark - 获取用户信息
@@ -131,7 +162,7 @@
     
     };
     
-    NSArray *statuses = [GZStatusTool statusesWithParams:params];
+    NSArray *statuses = [[GZStatusTool sharedInstance] statusesWithParams:params];
     if (statuses.count) {
         dealingResult(statuses);
     } else {
@@ -139,7 +170,7 @@
             
             //        GZLog(@"%@",json);
             // 存入数据库
-            [GZStatusTool saveStatuses:json];
+            [[GZStatusTool sharedInstance] saveStatuses:json];
             
             dealingResult(json);
             
@@ -231,13 +262,13 @@
         [self.tableView reloadData];
     };
     
-    NSArray *statuses = [GZStatusTool statusesWithParams:params];
+    NSArray *statuses = [[GZStatusTool sharedInstance] statusesWithParams:params];
     if (statuses.count) {
         dealingResult(statuses);
     } else {
         [[GZHttpTool shareHttpTool] getWithURL:kGZHomeTimeLine params:params success:^(id json) {
             
-            [GZStatusTool saveStatuses:json];
+            [[GZStatusTool sharedInstance] saveStatuses:json];
             dealingResult(json);
             
         } failure:^(NSError *error) {

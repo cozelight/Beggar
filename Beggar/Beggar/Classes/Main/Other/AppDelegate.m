@@ -8,7 +8,8 @@
 
 #import "AppDelegate.h"
 #import "GZTabBarController.h"
-#import "GZOAuthViewController.h"
+#import "GZLoginViewController.h"
+#import "GZNavigationController.h"
 #import "GZAccountTool.h"
 
 @interface AppDelegate ()
@@ -31,7 +32,8 @@
     if (account) {
         self.window.rootViewController = [[GZTabBarController alloc] init];
     } else {
-        self.window.rootViewController = [[GZOAuthViewController alloc] init];
+        GZLoginViewController *loginVC = [[GZLoginViewController alloc] init];
+        self.window.rootViewController = [[GZNavigationController alloc] initWithRootViewController:loginVC];
     }
     
     // 设置状态栏属性

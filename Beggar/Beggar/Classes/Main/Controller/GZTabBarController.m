@@ -34,8 +34,6 @@
     
     GZProfileViewController *profile = [[GZProfileViewController alloc] init];
     [self addChildVc:profile title:@"个人" image:@"home_tab_icon_4" selectedImage:@"home_tab_icon_4_selected"];
-    
-    
 }
 
 /**

@@ -16,6 +16,8 @@ typedef void (^HttpRequestFailure)(NSError *error);
 
 + (instancetype)shareHttpTool;
 
++ (void)releaseInstance;
+
 - (void)acquireOAuthRequestTokenWithSuccess:(void (^)(NSURL *reqUrl))success failure:(void (^)(NSError *error))failure;
 
 - (void)acquireOAuthAccessTokenWithSuccess:(void (^)())success failure:(void (^)(NSError *error))failure;

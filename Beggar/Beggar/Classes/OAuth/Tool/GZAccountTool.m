@@ -23,4 +23,8 @@
     return [NSKeyedUnarchiver unarchiveObjectWithFile:GZAccountPath];
 }
 
++ (void)logoutAccount {
+    [[NSFileManager defaultManager] removeItemAtPath:GZAccountPath error:nil];
+}
+
 @end

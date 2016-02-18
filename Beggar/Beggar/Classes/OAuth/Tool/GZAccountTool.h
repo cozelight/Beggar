@@ -25,5 +25,6 @@
  */
 + (GZAccount *)account;
 
++ (void)logoutAccount;
 
 @end

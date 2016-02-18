@@ -92,7 +92,7 @@
 - (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchString:(NSString *)searchString
 {
     if (searchString.length) {
-        NSArray *resultStatus = [GZStatusTool searchStatusesWithText:searchString];
+        NSArray *resultStatus = [[GZStatusTool sharedInstance] searchStatusesWithText:searchString];
         
         // 将 "微博字典"数组 转为 "微博模型"数组
         NSArray *newStatuses = [MTLJSONAdapter modelsOfClass:GZStatus.class fromJSONArray:resultStatus error:nil];
